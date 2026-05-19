@@ -1,0 +1,56 @@
+# ABB MoveL CSV Schema Notes
+
+## Keys
+
+- `testId` pairs records across all CSV files.
+- `success_<version>.csv` can contain multiple rows per `testId`, typically one per `confId`/branch candidate.
+- `pathl_<version>.csv` can contain many rows per `testId` and `confId`.
+
+## RAPID Replay Declarations
+
+Replay modules are generated from `tests_<version>.csv` and `success_<version>.csv`.
+
+- `rA_<version>_t<testId>`: `robtarget` from `A_x/y/z`, `A_q1/q2/q3/q4`, and `A_cf1/cf4/cf6/cfx`.
+- `rB_<version>_t<testId>`: `robtarget` from `B_x/y/z`, `B_q1/q2/q3/q4`, and `B_cf1/cf4/cf6/cfx`.
+- `rB_<version>_t<testId>_c<confId>`: `robtarget` copied from `B_x/y/z` and `B_q1/q2/q3/q4`, with `confdata` from `success.B*_cf1`, `success.B*_cf4`, `success.B*_cf6`, and `success.B*_cfx`.
+- `jA_<version>_t<testId>`: `jointtarget` from `A_rax1..6`.
+- `jB_<version>_t<testId>`: `jointtarget` from `B_rax1..6`.
+- `jBseed_<version>_t<testId>`: `jointtarget` from `Bseed_rax1..6`.
+
+The replay export intentionally does not use arrays so individual test declarations are easy to search by name.
+
+## Joint Target Groups
+
+Joint axes use suffixes `rax1` through `rax6`.
+
+- `C_rax*`: actual robot end joint target after successful MoveL execution.
+- `CalcC_rax*`: predicted final joint target.
+- `PathL_rax*`: predicted PathL final joint target in the success table.
+- `ControlShort_rax*` and `ControlLong_rax*`: newer control predictions from the test table.
+- `LiftShort_rax*` and `LiftLong_rax*`: legacy lifted predictions from the test table.
+
+Values like `9E+9` indicate unavailable/invalid prediction branches and should be ignored for normal equality checks.
+
+## Core Comparisons
+
+For each `success` row:
+
+- Compare `C_rax*` vs `CalcC_rax*`.
+- Compare `C_rax*` vs `PathL_rax*`.
+- Compare `CalcC_rax*` vs `PathL_rax*`.
+- If `ControlMatchShort = TRUE`, compare `PathL_rax*` with `tests.ControlShort_rax*`.
+- If `ControlMatchLong = TRUE`, compare `PathL_rax*` with `tests.ControlLong_rax*`.
+- Compare old `MatchesShort/MatchesLong` with `ControlMatchShort/ControlMatchLong` to find behavior changes between implementations.
+
+## PathL Diagnostics
+
+For each `pathl` row:
+
+- `branch S/L`: expected branch label, usually `S` or `L`.
+- `FoundBranch`: branch detected by the PathL prediction.
+- `CfxOK`: whether the configuration/external axis constraint was satisfied.
+- `PathDist`: distance residual for path prediction.
+- `Rotdist`: rotation residual for orientation prediction.
+- `RatioPath` and `RatioRot`: normalized path/rotation progress values.
+
+Flag rows where `CfxOK` is not true, `FoundBranch` differs from `branch S/L`, or distance residuals exceed the configured warning tolerance.

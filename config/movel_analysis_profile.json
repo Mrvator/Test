@@ -1,0 +1,7 @@
+{
+  "joint_abs_tolerance_deg": 0.01,
+  "path_distance_warn_mm": 1.0,
+  "rotation_distance_warn_deg": 1.0,
+  "invalid_joint_abs_min": 1000000000.0,
+  "max_anomaly_rows": 40
+}
