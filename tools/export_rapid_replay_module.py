@@ -15,7 +15,7 @@ AXES = range(1, 7)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--version", required=True, help="CSV suffix, for example v11")
+    parser.add_argument("--version", required=True, help="CSV suffix, for example v15")
     parser.add_argument("--root", default=".", help="Folder with tests/success CSV files")
     parser.add_argument("--test-id", action="append", default=[], help="Export only this testId; can be repeated")
     parser.add_argument("--conf-id", action="append", default=[], help="Export only this confId; can be repeated")
@@ -32,6 +32,10 @@ def parse_args() -> argparse.Namespace:
 def read_csv(path: Path) -> list[dict[str, str]]:
     with path.open("r", encoding="utf-8-sig", newline="") as handle:
         return list(csv.DictReader(handle, delimiter=";"))
+
+
+def csv_path(root: Path, stem: str, version: str) -> Path:
+    return root / f"{stem}_{version}.csv"
 
 
 def rapid_num(value: str | None) -> str:
@@ -92,8 +96,8 @@ def main() -> int:
     args = parse_args()
     root = Path(args.root)
     version = args.version
-    tests = read_csv(root / f"tests_{version}.csv")
-    success = read_csv(root / f"success_{version}.csv")
+    tests = read_csv(csv_path(root, "tests", version))
+    success = read_csv(csv_path(root, "success", version))
 
     test_filter = set(args.test_id)
     conf_filter = set(args.conf_id)
@@ -116,9 +120,11 @@ def main() -> int:
     success = sorted(success, key=lambda row: (int(row["testId"]), int(row["confId"])))
 
     module_name = args.module_name or default_module_name(version, args.test_id, args.conf_id)
+    input_tests = csv_path(root, "tests", version).name
+    input_success = csv_path(root, "success", version).name
     lines = [
         f"MODULE {module_name}",
-        f"    ! Generated from tests_{version}.csv and success_{version}.csv.",
+        f"    ! Generated from {input_tests} and {input_success}.",
         "    ! Target names include version and testId. B* variants include version, testId, and confId.",
         "",
     ]

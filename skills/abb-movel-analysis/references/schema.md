@@ -8,7 +8,7 @@
 
 ## RAPID Replay Declarations
 
-Replay modules are generated from `tests_<version>.csv` and `success_<version>.csv`.
+Replay modules are generated from versioned `tests_<version>.csv` and `success_<version>.csv` files. Fresh `tests.csv`, `success.csv`, and `pathl.csv` exports are renamed to the next version before analysis.
 
 - `rA_<version>_t<testId>`: `robtarget` from `A_x/y/z`, `A_q1/q2/q3/q4`, and `A_cf1/cf4/cf6/cfx`.
 - `rB_<version>_t<testId>`: `robtarget` from `B_x/y/z`, `B_q1/q2/q3/q4`, and `B_cf1/cf4/cf6/cfx`.
@@ -26,10 +26,20 @@ Joint axes use suffixes `rax1` through `rax6`.
 - `C_rax*`: actual robot end joint target after successful MoveL execution.
 - `CalcC_rax*`: predicted final joint target.
 - `PathL_rax*`: predicted PathL final joint target in the success table.
-- `ControlShort_rax*` and `ControlLong_rax*`: newer control predictions from the test table.
+- `ControlShort_rax*` and `ControlLong_rax*`: current control predictions from the test table.
+- `FinestStepS` and `FinestStepL`: smallest subdivision step reached while checking short/long trajectory continuity.
+- `ControlShortMaxAx1/4/6` and `ControlLongMaxAx1/4/6`: largest sampled joint jumps used with `FinestStepS/L` to decide whether the branch is singular/unavailable.
 - `LiftShort_rax*` and `LiftLong_rax*`: legacy lifted predictions from the test table.
 
 Values like `9E+9` indicate unavailable/invalid prediction branches and should be ignored for normal equality checks.
+
+## Singular Branch Rule
+
+For each short/long branch in `tests_<version>.csv`:
+
+- If `FinestStepS/L <= 0.0001` and the matching control max jump on axes 1/4/6 is greater than `60` degrees, the branch is unavailable.
+- Unavailable branches must have `bOKshort/bOKlong = FALSE`.
+- Unavailable branches must set `stErrShort/stErrLong` to `SINGULAR`.
 
 ## Core Comparisons
 
@@ -40,7 +50,7 @@ For each `success` row:
 - Compare `CalcC_rax*` vs `PathL_rax*`.
 - If `ControlMatchShort = TRUE`, compare `PathL_rax*` with `tests.ControlShort_rax*`.
 - If `ControlMatchLong = TRUE`, compare `PathL_rax*` with `tests.ControlLong_rax*`.
-- Compare old `MatchesShort/MatchesLong` with `ControlMatchShort/ControlMatchLong` to find behavior changes between implementations.
+- Check the singular branch rule before interpreting successful branch matches.
 
 ## PathL Diagnostics
 
