@@ -1,5 +1,5 @@
 {
-  "joint_abs_tolerance_deg": 0.01,
+  "joint_abs_tolerance_deg": 1.0,
   "finest_step_limit": 0.0001,
   "max_joint_jump_deg": 60.0,
   "path_distance_warn_mm": 1.0,

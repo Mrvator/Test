@@ -1,6 +1,6 @@
 ---
 name: abb-movel-analysis
-description: Analyze structured ABB RobotStudio MoveL/autohoming CSV logs across tests, success rows, PathL samples, predicted joint targets, and singular branch classification. Use when comparing C_rax, CalcC_rax, PathL_rax, ControlShort/ControlLong, FinestStepS/L, stErrShort/stErrLong, branch matches, or continuous linear trajectory prediction behavior.
+description: Analyze structured ABB RobotStudio MoveL/autohoming CSV logs across tests, success rows, PathL samples, predicted joint targets, singular branch classification, and PathRatio/RotRatio precision. Use when comparing C_rax, CalcC_rax, PathL_rax, ControlShort/ControlLong, FinestStepS/L, stErrShort/stErrLong, branch matches, continuous linear trajectory prediction behavior, PathL ratio accuracy, or thresholds for switching ratio calculation between path length and rotation length.
 ---
 
 # ABB MoveL Analysis
@@ -29,6 +29,31 @@ Always answer these first:
 - Do branches that hit `FinestStepS/L <= 0.0001` with a max jump greater than 60 degrees report `stErrShort/stErrLong = SINGULAR`?
 - Do PathL samples keep `CfxOK = TRUE` and `FoundBranch` equal to `branch S/L`?
 - Which tests have large path distance or rotation distance residuals?
+- How accurate is `RatioPath` on odd PathL rows versus `RatioRot` on even PathL rows?
+- At what `PathLength`/`RotLength` ranges does one ratio source become unreliable enough to switch to the other source?
+- Which cases are below practical ratio resolution because both `PathLength` and `RotLength` are too small?
+
+## PathL Ratio Analysis
+
+Use PathL ratio diagnostics to estimate decision boundaries for ratio calculation:
+
+- Treat each `testId/confId/branch` PathL group as 100 pairs: odd rows are `PathRatio`, even rows are `RotRatio`.
+- Treat zero ratio values as valid measured results. Do not infer missing data from `0`.
+- From the new CSV convention onward, treat ratio value `999` as the explicit sentinel for "this ratio source was not used".
+- Older CSV versions may still contain `0` in unused ratio columns, which is ambiguous because `0` can also be a real measured result.
+- Compare odd-row `RatioPath` and even-row `RatioRot` against the expected sample ratio `(pairIndex + 1) / 100`.
+- Use absolute error `abs(RatioPath - expected)` and `abs(RatioRot - expected)` when measuring precision.
+- Flag out-of-range ratio only when the measured value is `< 0` or `> 1`; values between `0` and `0.01` are allowed.
+- Summarize ratio precision by `PathLength` and `RotLength`, especially the shortest path and rotation groups.
+- Look for the switch region where `RatioPath` error grows on short path lengths while `RatioRot` remains accurate, and the opposite region where rotation is too short.
+- Mark cases where both `PathLength` and `RotLength` are too short as below ratio resolution instead of forcing a path-vs-rotation winner.
+
+When reporting ratio behavior, prefer compact statistics over row dumps:
+
+- Include `testId`, `confId`, `branch`, `PathLength`, and `RotLength`.
+- For odd rows, report statistics of `abs(RatioPath - expected)`.
+- For even rows, report statistics of `abs(RatioRot - expected)`.
+- Use `n/min/mean/median/p95/max` unless the user asks for examples.
 
 ## File Roles
 

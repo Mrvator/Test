@@ -64,3 +64,29 @@ For each `pathl` row:
 - `RatioPath` and `RatioRot`: normalized path/rotation progress values.
 
 Flag rows where `CfxOK` is not true, `FoundBranch` differs from `branch S/L`, or distance residuals exceed the configured warning tolerance.
+
+## PathL Ratio Pairing
+
+For each `testId/confId/branch` group, PathL samples are expected to be ordered as 100 pairs:
+
+- Odd row in the pair: path-based ratio sample; read `RatioPath`.
+- Even row in the pair: rotation-based ratio sample; read `RatioRot`.
+- Pair index is zero-based in code, but expected ratio is `(pairIndex + 1) / 100`.
+
+Important interpretation rules:
+
+- `0` is a valid measured ratio value and must be compared with the expected ratio.
+- Do not treat a zero ratio as an absent path or rotation result.
+- New CSV versions use `999` as the explicit sentinel meaning the ratio source was not used.
+- Older CSV versions may use `0` in unused ratio columns, so those columns are ambiguous unless the row position identifies the active source.
+- Values in `[0, 0.01]` are not out-of-range. They may be inaccurate for the expected sample, but they are not invalid.
+- Out-of-range means `< 0` or `> 1`.
+- For ratio precision, use absolute error:
+  - odd rows: `abs(RatioPath - expected)`.
+  - even rows: `abs(RatioRot - expected)`.
+
+Use these statistics to find practical switching boundaries:
+
+- Short `PathLength` can make path-based ratio less precise.
+- Short `RotLength` can make rotation-based ratio less precise.
+- If both `PathLength` and `RotLength` are very short and both absolute errors are high, classify the case as below ratio resolution rather than choosing either ratio source.

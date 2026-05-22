@@ -34,6 +34,45 @@ def read_csv(path: Path) -> list[dict[str, str]]:
         return list(csv.DictReader(handle, delimiter=";"))
 
 
+def read_tests_csv(path: Path) -> list[dict[str, str]]:
+    with path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.DictReader(handle, delimiter=";")
+        validate_tests_header(reader.fieldnames or [], path)
+        return list(reader)
+
+
+def validate_tests_header(header: list[str], path: Path) -> None:
+    expected_order = [
+        "stErrLong",
+        "FinestStepS",
+        "FinestStepL",
+        "ControlShort_rax1",
+        "ControlShort_rax2",
+        "ControlShort_rax3",
+        "ControlShort_rax4",
+        "ControlShort_rax5",
+        "ControlShort_rax6",
+        "ControlLong_rax1",
+        "ControlLong_rax2",
+        "ControlLong_rax3",
+        "ControlLong_rax4",
+        "ControlLong_rax5",
+        "ControlLong_rax6",
+        "ControlShortMaxAx1",
+    ]
+    missing = [column for column in expected_order if column not in header]
+    if missing:
+        raise ValueError(f"{path}: tests CSV is missing required columns: {', '.join(missing)}")
+
+    start = header.index("stErrLong")
+    actual = header[start : start + len(expected_order)]
+    if actual != expected_order:
+        raise ValueError(
+            f"{path}: unexpected tests CSV column order after stErrLong; "
+            "expected FinestStepS/L before ControlShort/ControlLong columns"
+        )
+
+
 def csv_path(root: Path, stem: str, version: str) -> Path:
     return root / f"{stem}_{version}.csv"
 
@@ -96,7 +135,7 @@ def main() -> int:
     args = parse_args()
     root = Path(args.root)
     version = args.version
-    tests = read_csv(csv_path(root, "tests", version))
+    tests = read_tests_csv(csv_path(root, "tests", version))
     success = read_csv(csv_path(root, "success", version))
 
     test_filter = set(args.test_id)

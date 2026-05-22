@@ -42,7 +42,7 @@ python tools/analyze_movel_csv.py --version v15
 - `CalcC_rax*` vs `PathL_rax*`.
 - Singular/unavailable short and long branch classification from `FinestStepS/L`, max sampled jump, `bOKshort/bOKlong`, and `stErrShort/stErrLong`.
 - Selected `ControlShort_rax*`/`ControlLong_rax*` target vs `PathL_rax*`.
-- PathL diagnostic anomalies by `CfxOK`, `FoundBranch`, `PathDist`, and `Rotdist`.
+- PathL diagnostic anomaly statistics by `CfxOK`, `FoundBranch`, `PathDist`, and `Rotdist`.
 
 The continuity rule is: if `FinestStepS/L <= 0.0001` and the matching max joint jump is greater than `60` degrees, the branch is unavailable and must report `stErrShort/stErrLong = SINGULAR`.
 
