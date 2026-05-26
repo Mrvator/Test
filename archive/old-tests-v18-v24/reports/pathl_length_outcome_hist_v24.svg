@@ -1,0 +1,150 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="820" viewBox="0 0 1220 820">
+<style>
+svg{background:#f8fafc;color:#111827;font-family:Segoe UI,Arial,sans-serif}
+.title{font-size:24px;font-weight:700;fill:#111827}
+.subtitle,.legend{font-size:13px;fill:#4b5563}
+.plot-bg{fill:#ffffff;stroke:#d1d5db;stroke-width:1}
+.grid{stroke:#e5e7eb;stroke-width:1}
+.axis{stroke:#374151;stroke-width:1.4}
+.tick{font-size:12px;fill:#4b5563}
+.axis-label{font-size:14px;font-weight:650;fill:#374151}
+.side-title{font-size:14px;font-weight:700;fill:#111827}
+</style>
+<text x="86" y="34" class="title">PathL raw length distribution</text>
+<text x="1010" y="34" text-anchor="end" class="subtitle">pathl_v24.csv; stacked by group status</text>
+<text x="86" y="48" class="side-title">PathLength distribution</text>
+<rect x="86" y="66" width="924" height="285" class="plot-bg"/>
+<line x1="86" y1="351.00" x2="1010" y2="351.00" class="grid"/>
+<text x="74" y="355.00" text-anchor="end" class="tick">0</text>
+<line x1="86" y1="315.38" x2="1010" y2="315.38" class="grid"/>
+<text x="74" y="319.38" text-anchor="end" class="tick">2</text>
+<line x1="86" y1="279.75" x2="1010" y2="279.75" class="grid"/>
+<text x="74" y="283.75" text-anchor="end" class="tick">4</text>
+<line x1="86" y1="244.12" x2="1010" y2="244.12" class="grid"/>
+<text x="74" y="248.12" text-anchor="end" class="tick">6</text>
+<line x1="86" y1="208.50" x2="1010" y2="208.50" class="grid"/>
+<text x="74" y="212.50" text-anchor="end" class="tick">8</text>
+<line x1="86" y1="172.88" x2="1010" y2="172.88" class="grid"/>
+<text x="74" y="176.88" text-anchor="end" class="tick">10</text>
+<line x1="86" y1="137.25" x2="1010" y2="137.25" class="grid"/>
+<text x="74" y="141.25" text-anchor="end" class="tick">12</text>
+<line x1="86" y1="101.62" x2="1010" y2="101.62" class="grid"/>
+<text x="74" y="105.62" text-anchor="end" class="tick">14</text>
+<line x1="86" y1="66.00" x2="1010" y2="66.00" class="grid"/>
+<text x="74" y="70.00" text-anchor="end" class="tick">16</text>
+<rect x="87.00" y="333.19" width="25.18" height="17.81" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.1923..0.2309&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="114.18" y="333.19" width="25.18" height="17.81" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.2309..0.2694&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="141.35" y="297.56" width="25.18" height="53.44" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.2694..0.3080&#10;total=3, ok=0, distance=0, branch/incomplete=3</title></rect>
+<rect x="168.53" y="333.19" width="25.18" height="17.81" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.3080..0.3466&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="195.71" y="297.56" width="25.18" height="53.44" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.3466..0.3851&#10;total=3, ok=0, distance=0, branch/incomplete=3</title></rect>
+<rect x="222.88" y="333.19" width="25.18" height="17.81" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.3851..0.4237&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="250.06" y="297.56" width="25.18" height="53.44" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.4237..0.4622&#10;total=3, ok=0, distance=0, branch/incomplete=3</title></rect>
+<rect x="304.41" y="261.94" width="25.18" height="89.06" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.5008..0.5393&#10;total=5, ok=0, distance=0, branch/incomplete=5</title></rect>
+<rect x="331.59" y="279.75" width="25.18" height="71.25" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.5393..0.5779&#10;total=4, ok=0, distance=0, branch/incomplete=4</title></rect>
+<rect x="358.76" y="226.31" width="25.18" height="124.69" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.5779..0.6165&#10;total=7, ok=0, distance=0, branch/incomplete=7</title></rect>
+<rect x="385.94" y="261.94" width="25.18" height="89.06" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.6165..0.6550&#10;total=5, ok=0, distance=0, branch/incomplete=5</title></rect>
+<rect x="413.12" y="226.31" width="25.18" height="124.69" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.6550..0.6936&#10;total=7, ok=0, distance=0, branch/incomplete=7</title></rect>
+<rect x="440.29" y="244.12" width="25.18" height="106.88" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.6936..0.7321&#10;total=6, ok=0, distance=0, branch/incomplete=6</title></rect>
+<rect x="467.47" y="66.00" width="25.18" height="285.00" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.7321..0.7707&#10;total=16, ok=0, distance=0, branch/incomplete=16</title></rect>
+<rect x="494.65" y="190.69" width="25.18" height="160.31" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.7707..0.8093&#10;total=9, ok=0, distance=0, branch/incomplete=9</title></rect>
+<rect x="521.82" y="119.44" width="25.18" height="231.56" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.8093..0.8478&#10;total=13, ok=0, distance=0, branch/incomplete=13</title></rect>
+<rect x="549.00" y="66.00" width="25.18" height="285.00" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.8478..0.8864&#10;total=16, ok=0, distance=0, branch/incomplete=16</title></rect>
+<rect x="576.18" y="101.62" width="25.18" height="249.38" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.8864..0.9249&#10;total=14, ok=0, distance=0, branch/incomplete=14</title></rect>
+<rect x="603.35" y="83.81" width="25.18" height="267.19" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.9249..0.9635&#10;total=15, ok=0, distance=0, branch/incomplete=15</title></rect>
+<rect x="630.53" y="83.81" width="25.18" height="267.19" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 0.9635..1.0021&#10;total=15, ok=0, distance=0, branch/incomplete=15</title></rect>
+<rect x="657.71" y="226.31" width="25.18" height="124.69" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.0021..1.0406&#10;total=7, ok=0, distance=0, branch/incomplete=7</title></rect>
+<rect x="684.88" y="101.62" width="25.18" height="249.38" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.0406..1.0792&#10;total=14, ok=0, distance=0, branch/incomplete=14</title></rect>
+<rect x="712.06" y="137.25" width="25.18" height="213.75" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.0792..1.1177&#10;total=12, ok=0, distance=0, branch/incomplete=12</title></rect>
+<rect x="739.24" y="83.81" width="25.18" height="267.19" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.1177..1.1563&#10;total=15, ok=0, distance=0, branch/incomplete=15</title></rect>
+<rect x="766.41" y="119.44" width="25.18" height="231.56" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.1563..1.1948&#10;total=13, ok=0, distance=0, branch/incomplete=13</title></rect>
+<rect x="793.59" y="83.81" width="25.18" height="267.19" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.1948..1.2334&#10;total=15, ok=0, distance=0, branch/incomplete=15</title></rect>
+<rect x="820.76" y="172.88" width="25.18" height="178.12" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.2334..1.2720&#10;total=10, ok=0, distance=0, branch/incomplete=10</title></rect>
+<rect x="847.94" y="101.62" width="25.18" height="249.38" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.2720..1.3105&#10;total=14, ok=0, distance=0, branch/incomplete=14</title></rect>
+<rect x="875.12" y="226.31" width="25.18" height="124.69" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.3105..1.3491&#10;total=7, ok=0, distance=0, branch/incomplete=7</title></rect>
+<rect x="902.29" y="297.56" width="25.18" height="53.44" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.3491..1.3876&#10;total=3, ok=0, distance=0, branch/incomplete=3</title></rect>
+<rect x="929.47" y="208.50" width="25.18" height="142.50" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.3876..1.4262&#10;total=8, ok=0, distance=0, branch/incomplete=8</title></rect>
+<rect x="956.65" y="172.88" width="25.18" height="178.12" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.4262..1.4648&#10;total=10, ok=0, distance=0, branch/incomplete=10</title></rect>
+<rect x="983.82" y="261.94" width="25.18" height="89.06" fill="#dc2626" opacity="0.82"><title>PathLength [mm]: 1.4648..1.5033&#10;total=5, ok=0, distance=0, branch/incomplete=5</title></rect>
+<line x1="91.42" y1="66" x2="91.42" y2="351" class="grid"/>
+<text x="91.42" y="376" text-anchor="middle" class="tick">0.2</text>
+<line x1="232.38" y1="66" x2="232.38" y2="351" class="grid"/>
+<text x="232.38" y="376" text-anchor="middle" class="tick">0.4</text>
+<line x1="373.34" y1="66" x2="373.34" y2="351" class="grid"/>
+<text x="373.34" y="376" text-anchor="middle" class="tick">0.6</text>
+<line x1="514.30" y1="66" x2="514.30" y2="351" class="grid"/>
+<text x="514.30" y="376" text-anchor="middle" class="tick">0.8</text>
+<line x1="655.26" y1="66" x2="655.26" y2="351" class="grid"/>
+<text x="655.26" y="376" text-anchor="middle" class="tick">1</text>
+<line x1="796.22" y1="66" x2="796.22" y2="351" class="grid"/>
+<text x="796.22" y="376" text-anchor="middle" class="tick">1.2</text>
+<line x1="937.18" y1="66" x2="937.18" y2="351" class="grid"/>
+<text x="937.18" y="376" text-anchor="middle" class="tick">1.4</text>
+<line x1="86" y1="351" x2="1010" y2="351" class="axis"/>
+<line x1="86" y1="66" x2="86" y2="351" class="axis"/>
+<text x="548.0" y="405" text-anchor="middle" class="axis-label">PathLength [mm]</text>
+<text x="86" y="438" class="side-title">RotLength distribution</text>
+<rect x="86" y="456" width="924" height="285" class="plot-bg"/>
+<line x1="86" y1="741.00" x2="1010" y2="741.00" class="grid"/>
+<text x="74" y="745.00" text-anchor="end" class="tick">0</text>
+<line x1="86" y1="680.36" x2="1010" y2="680.36" class="grid"/>
+<text x="74" y="684.36" text-anchor="end" class="tick">10</text>
+<line x1="86" y1="619.72" x2="1010" y2="619.72" class="grid"/>
+<text x="74" y="623.72" text-anchor="end" class="tick">20</text>
+<line x1="86" y1="559.09" x2="1010" y2="559.09" class="grid"/>
+<text x="74" y="563.09" text-anchor="end" class="tick">30</text>
+<line x1="86" y1="498.45" x2="1010" y2="498.45" class="grid"/>
+<text x="74" y="502.45" text-anchor="end" class="tick">40</text>
+<rect x="87.00" y="698.55" width="25.18" height="42.45" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 25.1183..34.0877&#10;total=7, ok=0, distance=0, branch/incomplete=7</title></rect>
+<rect x="114.18" y="692.49" width="25.18" height="48.51" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 34.0877..43.0571&#10;total=8, ok=0, distance=0, branch/incomplete=8</title></rect>
+<rect x="141.35" y="716.74" width="25.18" height="24.26" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 43.0571..52.0264&#10;total=4, ok=0, distance=0, branch/incomplete=4</title></rect>
+<rect x="168.53" y="680.36" width="25.18" height="60.64" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 52.0264..60.9958&#10;total=10, ok=0, distance=0, branch/incomplete=10</title></rect>
+<rect x="195.71" y="662.17" width="25.18" height="78.83" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 60.9958..69.9651&#10;total=13, ok=0, distance=0, branch/incomplete=13</title></rect>
+<rect x="222.88" y="637.91" width="25.18" height="103.09" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 69.9651..78.9345&#10;total=17, ok=0, distance=0, branch/incomplete=17</title></rect>
+<rect x="250.06" y="528.77" width="25.18" height="212.23" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 78.9345..87.9039&#10;total=35, ok=0, distance=0, branch/incomplete=35</title></rect>
+<rect x="277.24" y="456.00" width="25.18" height="285.00" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 87.9039..96.8732&#10;total=47, ok=0, distance=0, branch/incomplete=47</title></rect>
+<rect x="304.41" y="577.28" width="25.18" height="163.72" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 96.8732..105.8426&#10;total=27, ok=0, distance=0, branch/incomplete=27</title></rect>
+<rect x="331.59" y="674.30" width="25.18" height="66.70" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 105.8426..114.8119&#10;total=11, ok=0, distance=0, branch/incomplete=11</title></rect>
+<rect x="358.76" y="728.87" width="25.18" height="12.13" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 114.8119..123.7813&#10;total=2, ok=0, distance=0, branch/incomplete=2</title></rect>
+<rect x="385.94" y="686.43" width="25.18" height="54.57" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 123.7813..132.7506&#10;total=9, ok=0, distance=0, branch/incomplete=9</title></rect>
+<rect x="413.12" y="716.74" width="25.18" height="24.26" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 132.7506..141.7200&#10;total=4, ok=0, distance=0, branch/incomplete=4</title></rect>
+<rect x="440.29" y="692.49" width="25.18" height="48.51" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 141.7200..150.6894&#10;total=8, ok=0, distance=0, branch/incomplete=8</title></rect>
+<rect x="467.47" y="722.81" width="25.18" height="18.19" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 150.6894..159.6587&#10;total=3, ok=0, distance=0, branch/incomplete=3</title></rect>
+<rect x="494.65" y="734.94" width="25.18" height="6.06" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 159.6587..168.6281&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="576.18" y="728.87" width="25.18" height="12.13" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 186.5668..195.5361&#10;total=2, ok=0, distance=0, branch/incomplete=2</title></rect>
+<rect x="603.35" y="734.94" width="25.18" height="6.06" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 195.5361..204.5055&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="630.53" y="734.94" width="25.18" height="6.06" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 204.5055..213.4749&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="657.71" y="716.74" width="25.18" height="24.26" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 213.4749..222.4442&#10;total=4, ok=0, distance=0, branch/incomplete=4</title></rect>
+<rect x="684.88" y="716.74" width="25.18" height="24.26" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 222.4442..231.4136&#10;total=4, ok=0, distance=0, branch/incomplete=4</title></rect>
+<rect x="712.06" y="698.55" width="25.18" height="42.45" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 231.4136..240.3829&#10;total=7, ok=0, distance=0, branch/incomplete=7</title></rect>
+<rect x="739.24" y="710.68" width="25.18" height="30.32" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 240.3829..249.3523&#10;total=5, ok=0, distance=0, branch/incomplete=5</title></rect>
+<rect x="766.41" y="680.36" width="25.18" height="60.64" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 249.3523..258.3216&#10;total=10, ok=0, distance=0, branch/incomplete=10</title></rect>
+<rect x="793.59" y="692.49" width="25.18" height="48.51" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 258.3216..267.2910&#10;total=8, ok=0, distance=0, branch/incomplete=8</title></rect>
+<rect x="820.76" y="674.30" width="25.18" height="66.70" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 267.2910..276.2604&#10;total=11, ok=0, distance=0, branch/incomplete=11</title></rect>
+<rect x="847.94" y="710.68" width="25.18" height="30.32" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 276.2604..285.2297&#10;total=5, ok=0, distance=0, branch/incomplete=5</title></rect>
+<rect x="875.12" y="710.68" width="25.18" height="30.32" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 285.2297..294.1991&#10;total=5, ok=0, distance=0, branch/incomplete=5</title></rect>
+<rect x="902.29" y="734.94" width="25.18" height="6.06" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 294.1991..303.1684&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<rect x="929.47" y="722.81" width="25.18" height="18.19" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 303.1684..312.1378&#10;total=3, ok=0, distance=0, branch/incomplete=3</title></rect>
+<rect x="956.65" y="716.74" width="25.18" height="24.26" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 312.1378..321.1071&#10;total=4, ok=0, distance=0, branch/incomplete=4</title></rect>
+<rect x="983.82" y="734.94" width="25.18" height="6.06" fill="#dc2626" opacity="0.82"><title>RotLength [deg]: 321.1071..330.0765&#10;total=1, ok=0, distance=0, branch/incomplete=1</title></rect>
+<line x1="161.39" y1="456" x2="161.39" y2="741" class="grid"/>
+<text x="161.39" y="766" text-anchor="middle" class="tick">50</text>
+<line x1="312.89" y1="456" x2="312.89" y2="741" class="grid"/>
+<text x="312.89" y="766" text-anchor="middle" class="tick">100</text>
+<line x1="464.38" y1="456" x2="464.38" y2="741" class="grid"/>
+<text x="464.38" y="766" text-anchor="middle" class="tick">150</text>
+<line x1="615.88" y1="456" x2="615.88" y2="741" class="grid"/>
+<text x="615.88" y="766" text-anchor="middle" class="tick">200</text>
+<line x1="767.37" y1="456" x2="767.37" y2="741" class="grid"/>
+<text x="767.37" y="766" text-anchor="middle" class="tick">250</text>
+<line x1="918.87" y1="456" x2="918.87" y2="741" class="grid"/>
+<text x="918.87" y="766" text-anchor="middle" class="tick">300</text>
+<line x1="86" y1="741" x2="1010" y2="741" class="axis"/>
+<line x1="86" y1="456" x2="86" y2="741" class="axis"/>
+<text x="548.0" y="795" text-anchor="middle" class="axis-label">RotLength [deg]</text>
+<rect x="1038" y="84" width="18" height="18" fill="#94a3b8" opacity="0.82"/>
+<text x="1066" y="98" class="legend">OK</text>
+<rect x="1038" y="112" width="18" height="18" fill="#f59e0b" opacity="0.82"/>
+<text x="1066" y="126" class="legend">distance &gt; limit</text>
+<rect x="1038" y="140" width="18" height="18" fill="#dc2626" opacity="0.82"/>
+<text x="1066" y="154" class="legend">branch mismatch / incomplete</text>
+</svg>

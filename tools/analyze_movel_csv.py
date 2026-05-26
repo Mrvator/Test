@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import html
 import json
 import math
 from collections import Counter, defaultdict
@@ -16,19 +17,32 @@ from typing import Iterable
 
 AXES = range(1, 7)
 PATHL_SAMPLES_PER_BRANCH = 100
-PATHL_EXPECTED_ROWS_PER_BRANCH = PATHL_SAMPLES_PER_BRANCH * 2
-PATHL_RATIO_TOL = 0.006
 PATHL_ZERO_TOL = 1e-9
 PATHL_UNUSED_RATIO_SENTINEL = 999.0
-PATHL_RATIO_EXAMPLE_LIMIT = 5
-PATHL_SHORT_GROUP_LIMIT = 10
-PATHL_RATIO_EXAMPLE_PROBLEMS = [
-    "RatioPath not increasing",
-    "RatioPath outside 0..1",
-    "odd row is not PathRatio",
-    "RatioRot outside 0..1",
+PATHL_PATH_LENGTH_BUCKETS = [
+    (1.0, "<1"),
+    (10.0, "<10"),
+    (100.0, "<100"),
+    (math.inf, ">=100"),
 ]
-
+PATHL_ROT_LENGTH_BUCKETS = [
+    (1.0, "<1"),
+    (10.0, "<10"),
+    (90.0, "<90"),
+    (180.0, "<180"),
+    (270.0, "<270"),
+    (350.0, "<350"),
+    (359.0, "<359"),
+    (math.inf, ">=359"),
+]
+PATHL_PRECISION_METRICS = [
+    "PathRatio error",
+    "RotRatio error",
+    "PathDist from PathRatio rows",
+    "PathDist from RotRatio rows",
+    "RotDist from PathRatio rows",
+    "RotDist from RotRatio rows",
+]
 
 @dataclass(frozen=True)
 class Delta:
@@ -36,6 +50,16 @@ class Delta:
     axis: int
     values: list[float]
     valid: bool
+
+
+@dataclass(frozen=True)
+class JumpMax:
+    value: float
+    test_id: str
+    conf_id: str
+    branch: str
+    axis: int
+    row: dict[str, str] | None = None
 
 
 def parse_args() -> argparse.Namespace:
@@ -48,6 +72,11 @@ def parse_args() -> argparse.Namespace:
         help="Analysis profile JSON with tolerances",
     )
     parser.add_argument("--out", default=None, help="Output Markdown path")
+    parser.add_argument(
+        "--fail-on-maxwin2-limit",
+        action="store_true",
+        help="Return a non-zero exit code when legacy MaxWin2 exceeds the configured limit",
+    )
     return parser.parse_args()
 
 
@@ -100,9 +129,8 @@ def validate_tests_header(header: list[str], path: Path) -> None:
     if missing:
         raise ValueError(f"{path}: tests CSV is missing required columns: {', '.join(missing)}")
 
-    start = header.index("stErrLong")
-    actual = header[start : start + len(expected_order)]
-    if actual != expected_order:
+    positions = [header.index(column) for column in expected_order]
+    if positions != sorted(positions):
         raise ValueError(
             f"{path}: unexpected tests CSV column order after stErrLong; "
             "expected FinestStepS/L before ControlShort/ControlLong columns"
@@ -160,6 +188,10 @@ def fmt_num(value: float) -> str:
     return f"{value:.6f}"
 
 
+def fmt_axis(axis: int) -> str:
+    return f"Ax{axis}" if axis else "n/a"
+
+
 def md_table(headers: list[str], rows: list[list[object]]) -> list[str]:
     if not rows:
         return ["None."]
@@ -191,123 +223,10 @@ def stats_summary(values: Iterable[float]) -> dict[str, float | int]:
     }
 
 
-def stats_row(label: str, values: Iterable[float]) -> list[object]:
+
+
+def stats_row_full(label: str, values: Iterable[float]) -> list[object]:
     stats = stats_summary(values)
-    return [
-        label,
-        stats["n"],
-        fmt_num(float(stats["mean"])),
-        fmt_num(float(stats["median"])),
-        fmt_num(float(stats["p95"])),
-        fmt_num(float(stats["max"])),
-    ]
-
-
-def is_unused_ratio_marker(value: float) -> bool:
-    return math.isfinite(value) and (
-        abs(value) <= PATHL_ZERO_TOL or abs(value - PATHL_UNUSED_RATIO_SENTINEL) <= PATHL_ZERO_TOL
-    )
-
-
-def used_ratio_value(value: str | None) -> float:
-    ratio = as_float(value)
-    if math.isfinite(ratio) and abs(ratio - PATHL_UNUSED_RATIO_SENTINEL) <= PATHL_ZERO_TOL:
-        return math.nan
-    return ratio
-
-
-def pathl_short_group_stats_row(test_id: str, conf_id: str, branch: str, rows: list[dict[str, str]]) -> list[object]:
-    if not rows:
-        return []
-
-    path_length = as_float(rows[0].get("PathLenth"))
-    rot_length = as_float(rows[0].get("RotLength"))
-    path_ratio_diffs: list[float] = []
-    rot_ratio_diffs: list[float] = []
-
-    for pair_index in range(len(rows) // 2):
-        path_row = rows[pair_index * 2]
-        rot_row = rows[pair_index * 2 + 1]
-        expected_ratio = (pair_index + 1) / PATHL_SAMPLES_PER_BRANCH
-        path_ratio = used_ratio_value(path_row.get("RatioPath"))
-        rot_ratio = used_ratio_value(rot_row.get("RatioRot"))
-        path_ratio_diffs.append(abs(path_ratio - expected_ratio))
-        rot_ratio_diffs.append(abs(rot_ratio - expected_ratio))
-
-    path_diff_stats = stats_summary(path_ratio_diffs)
-    rot_diff_stats = stats_summary(rot_ratio_diffs)
-
-    return [
-        test_id,
-        conf_id,
-        branch,
-        fmt_num(path_length),
-        fmt_num(rot_length),
-        path_diff_stats["n"],
-        fmt_num(float(path_diff_stats["min"])),
-        fmt_num(float(path_diff_stats["mean"])),
-        fmt_num(float(path_diff_stats["median"])),
-        fmt_num(float(path_diff_stats["p95"])),
-        fmt_num(float(path_diff_stats["max"])),
-        rot_diff_stats["n"],
-        fmt_num(float(rot_diff_stats["min"])),
-        fmt_num(float(rot_diff_stats["mean"])),
-        fmt_num(float(rot_diff_stats["median"])),
-        fmt_num(float(rot_diff_stats["p95"])),
-        fmt_num(float(rot_diff_stats["max"])),
-    ]
-
-
-def legacy_max_ax_values(row: dict[str, str], branch: str) -> dict[int, float]:
-    return {axis: branch_axis_jump(row, "", branch, axis) for axis in (1, 4, 6)}
-
-
-def legacy_max_ax_row_value(row: dict[str, str], branch: str) -> tuple[float, int]:
-    values = legacy_max_ax_values(row, branch)
-    finite = [(value, axis) for axis, value in values.items() if math.isfinite(value)]
-    if not finite:
-        return math.nan, 0
-    value, axis = max(finite, key=lambda item: item[0])
-    return value, axis
-
-
-def legacy_max_ax_boundary_row(label: str, branch_rows: Iterable[tuple[dict[str, str], str]]) -> list[object]:
-    pairs: list[tuple[float, dict[str, str], str, int]] = []
-    for row, branch in branch_rows:
-        pairs.extend(
-            (value, row, branch, axis)
-            for axis, value in legacy_max_ax_values(row, branch).items()
-        )
-
-    values = [value for value, _, _, _ in pairs]
-    stats = stats_summary(values)
-    finite_pairs = [(value, row, branch, axis) for value, row, branch, axis in pairs if math.isfinite(value)]
-    test_id_at_max = "n/a"
-    branch_at_max = "n/a"
-    axis_at_max: int | str = "n/a"
-    max_ax_values = {1: math.nan, 4: math.nan, 6: math.nan}
-    if finite_pairs:
-        _, row_at_max, branch_at_max, axis_at_max = max(finite_pairs, key=lambda pair: pair[0])
-        test_id_at_max = row_at_max.get("testId", "")
-        max_ax_values = legacy_max_ax_values(row_at_max, branch_at_max)
-    return [
-        label,
-        stats["n"],
-        fmt_num(float(stats["mean"])),
-        fmt_num(float(stats["median"])),
-        fmt_num(float(stats["p95"])),
-        fmt_num(float(stats["max"])),
-        test_id_at_max,
-        branch_at_max,
-        f"Ax{axis_at_max}" if isinstance(axis_at_max, int) else axis_at_max,
-        fmt_num(max_ax_values[1]),
-        fmt_num(max_ax_values[4]),
-        fmt_num(max_ax_values[6]),
-    ]
-
-
-def finest_step_stats_row(label: str, rows: Iterable[dict[str, str]], branch: str) -> list[object]:
-    stats = stats_summary(branch_finest(row, branch) for row in rows)
     return [
         label,
         stats["n"],
@@ -319,42 +238,449 @@ def finest_step_stats_row(label: str, rows: Iterable[dict[str, str]], branch: st
     ]
 
 
-def jump_stats_row(label: str, rows: Iterable[dict[str, str]], branch: str, axis: int) -> list[object]:
-    pairs = [
-        (branch_axis_jump(row, "Control", branch, axis), branch_finest(row, branch))
-        for row in rows
-    ]
-    values = [value for value, _ in pairs]
-    stats = stats_summary(values)
-    finite_pairs = [(value, finest) for value, finest in pairs if math.isfinite(value)]
-    finest_at_max = math.nan
-    if finite_pairs:
-        _, finest_at_max = max(finite_pairs, key=lambda pair: pair[0])
+def bucket_label(value: float, buckets: list[tuple[float, str]]) -> str:
+    if not math.isfinite(value):
+        return "n/a"
+    for upper_bound, label in buckets:
+        if value < upper_bound:
+            return label
+    return buckets[-1][1]
+
+
+def add_metric(metrics: dict[str, list[float]], label: str, value: float) -> None:
+    if math.isfinite(value):
+        metrics[label].append(value)
+
+
+def metric_bucket_rows(
+    bucket_metrics: dict[str, dict[str, list[float]]],
+    bucket_labels: Iterable[str],
+) -> list[list[object]]:
+    rows: list[list[object]] = []
+    for bucket in bucket_labels:
+        for metric in PATHL_PRECISION_METRICS:
+            rows.append([bucket, *stats_row_full(metric, bucket_metrics[bucket][metric])])
+    return rows
+
+
+def is_unused_ratio_sentinel(value: float) -> bool:
+    return math.isfinite(value) and abs(value - PATHL_UNUSED_RATIO_SENTINEL) <= PATHL_ZERO_TOL
+
+
+def used_ratio_value(value: str | None) -> float:
+    ratio = as_float(value)
+    if math.isfinite(ratio) and abs(ratio - PATHL_UNUSED_RATIO_SENTINEL) <= PATHL_ZERO_TOL:
+        return math.nan
+    return ratio
+
+
+def pathl_path_length(row: dict[str, str]) -> float:
+    return as_float(row.get("PathLength") or row.get("PathLenght") or row.get("PathLenth"))
+
+
+def pathl_rot_dist(row: dict[str, str]) -> float:
+    return as_float(row.get("RotDist") or row.get("Rotdist"))
+
+
+def test_path_length(row: dict[str, str]) -> float:
+    return as_float(row.get("PathLength") or row.get("PathLenght") or row.get("PathLenth"))
+
+
+def test_rot_length(row: dict[str, str]) -> float:
+    return as_float(row.get("RotLength"))
+
+
+def pathl_expected_ratio(row: dict[str, str], pair_index: int) -> float:
+    expected_ratio = as_float(row.get("ExpectedRatio"))
+    if math.isfinite(expected_ratio):
+        return expected_ratio
+    return (pair_index + 1) / PATHL_SAMPLES_PER_BRANCH
+
+
+
+
+
+
+def legacy_max_ax_values(row: dict[str, str], branch: str) -> dict[int, float]:
+    return {axis: branch_axis_jump(row, "", branch, axis) for axis in (1, 4, 6)}
+
+
+
+
+
+
+def branch_conf_id(
+    row: dict[str, str],
+    branch: str,
+    conf_ids_by_branch: dict[tuple[str, str], list[str]],
+) -> str:
+    conf_ids = conf_ids_by_branch.get((row.get("testId", ""), branch), [])
+    return ",".join(conf_ids) if conf_ids else "n/a"
+
+
+def jump_metric_values(row: dict[str, str] | None, branch: str, axis: int) -> list[str]:
+    if row is None or branch not in ("S", "L") or axis not in (1, 4, 6):
+        return ["n/a", "n/a", "n/a"]
     return [
-        label,
-        stats["n"],
-        fmt_num(float(stats["mean"])),
-        fmt_num(float(stats["median"])),
-        fmt_num(float(stats["p95"])),
-        fmt_num(float(stats["max"])),
-        fmt_num(finest_at_max),
+        fmt_num(branch_axis_jump(row, "", branch, axis)),
+        fmt_num(branch_win_jump(row, branch, "Win", axis)),
+        fmt_num(branch_win_jump(row, branch, "Win2", axis)),
     ]
 
 
-def pearson(xs: list[float], ys: list[float]) -> float:
-    pairs = [(x, y) for x, y in zip(xs, ys) if math.isfinite(x) and math.isfinite(y)]
-    if len(pairs) < 2:
-        return math.nan
-    px = [x for x, _ in pairs]
-    py = [y for _, y in pairs]
-    mx = mean(px)
-    my = mean(py)
-    cov = sum((x - mx) * (y - my) for x, y in pairs)
-    sx = math.sqrt(sum((x - mx) ** 2 for x in px))
-    sy = math.sqrt(sum((y - my) ** 2 for y in py))
-    if sx == 0 or sy == 0:
-        return math.nan
-    return cov / (sx * sy)
+def legacy_max_ax_pooled_info(
+    branch_rows: Iterable[tuple[dict[str, str], str]],
+    conf_ids_by_branch: dict[tuple[str, str], list[str]],
+) -> JumpMax:
+    candidates: list[tuple[float, dict[str, str], str, int]] = [
+        (value, row, branch, axis)
+        for row, branch in branch_rows
+        for axis, value in legacy_max_ax_values(row, branch).items()
+        if math.isfinite(value)
+    ]
+    if not candidates:
+        return JumpMax(math.nan, "n/a", "n/a", "n/a", 0)
+    value, row, branch, axis = max(candidates, key=lambda item: item[0])
+    return JumpMax(value, row.get("testId", ""), branch_conf_id(row, branch, conf_ids_by_branch), branch, axis, row)
+
+
+
+
+def legacy_max_window_pairs(
+    label: str,
+    branch_rows: Iterable[tuple[dict[str, str], str]],
+    window: str,
+) -> list[tuple[str, float, dict[str, str], str, int, str]]:
+    pairs: list[tuple[str, float, dict[str, str], str, int, str]] = []
+    for row, branch in branch_rows:
+        for axis in (1, 4, 6):
+            column = f"{branch_name(branch)}Max{window}Ax{axis}"
+            pairs.append((label, as_float(row.get(column)), row, branch, axis, column))
+    return pairs
+
+
+
+
+def legacy_window_pooled_info(
+    pairs: Iterable[tuple[str, float, dict[str, str], str, int, str]],
+    conf_ids_by_branch: dict[tuple[str, str], list[str]],
+) -> JumpMax:
+    finite_pairs = [pair for pair in pairs if math.isfinite(pair[1])]
+    if not finite_pairs:
+        return JumpMax(math.nan, "n/a", "n/a", "n/a", 0)
+    _, value, row, branch, axis, _ = max(finite_pairs, key=lambda pair: pair[1])
+    return JumpMax(value, row.get("testId", ""), branch_conf_id(row, branch, conf_ids_by_branch), branch, axis, row)
+
+
+def aggregated_jump_summary_rows(
+    successful_branch_rows: list[tuple[dict[str, str], str]],
+    conf_ids_by_branch: dict[tuple[str, str], list[str]],
+) -> list[list[object]]:
+    successful_max_ax = legacy_max_ax_pooled_info(successful_branch_rows, conf_ids_by_branch)
+    successful_max_win = legacy_window_pooled_info(
+        legacy_max_window_pairs("successful", successful_branch_rows, "Win"),
+        conf_ids_by_branch,
+    )
+    successful_max_win2 = legacy_window_pooled_info(
+        legacy_max_window_pairs("successful", successful_branch_rows, "Win2"),
+        conf_ids_by_branch,
+    )
+
+    rows: list[list[object]] = []
+    for outcome, metric, jump_max in (
+        ("Successful", "MaxAx", successful_max_ax),
+        ("Successful", "MaxWin", successful_max_win),
+        ("Successful", "MaxWin2", successful_max_win2),
+    ):
+        rows.append(
+            [
+                outcome,
+                metric,
+                fmt_num(jump_max.value),
+                jump_max.test_id,
+                jump_max.conf_id,
+                jump_max.branch,
+                fmt_axis(jump_max.axis),
+                *jump_metric_values(jump_max.row, jump_max.branch, jump_max.axis),
+            ]
+        )
+    return rows
+
+
+
+
+
+
+
+
+def min_fmt(values: Iterable[float]) -> str:
+    finite = [value for value in values if math.isfinite(value)]
+    return fmt_num(min(finite)) if finite else "n/a"
+
+
+def legacy_branch_metric_max(row: dict[str, str], branch: str, metric: str) -> tuple[float, int]:
+    values: list[tuple[float, int]] = []
+    for axis in (1, 4, 6):
+        if metric == "MaxAx":
+            value = branch_axis_jump(row, "", branch, axis)
+        elif metric == "MaxWin2":
+            value = branch_win_jump(row, branch, "Win2", axis)
+        else:
+            raise ValueError(f"unsupported branch metric: {metric}")
+        if math.isfinite(value):
+            values.append((value, axis))
+    if not values:
+        return math.nan, 0
+    return max(values, key=lambda item: item[0])
+
+
+
+
+
+
+
+
+
+
+def legacy_order_violation_rows(branch_rows: Iterable[tuple[dict[str, str], str]]) -> list[list[object]]:
+    rows: list[list[object]] = []
+    for row, branch in branch_rows:
+        if not branch_ok(row, branch):
+            continue
+        for axis in (1, 4, 6):
+            max_ax = branch_axis_jump(row, "", branch, axis)
+            max_win = branch_win_jump(row, branch, "Win", axis)
+            max_win2 = branch_win_jump(row, branch, "Win2", axis)
+            if not all(math.isfinite(value) for value in (max_ax, max_win, max_win2)):
+                continue
+            if max_ax < max_win < max_win2:
+                continue
+            rows.append(
+                [
+                    row.get("testId", ""),
+                    branch,
+                    fmt_axis(axis),
+                    fmt_num(max_ax),
+                    fmt_num(max_win),
+                    fmt_num(max_win2),
+                    branch_ok(row, branch),
+                    branch_status(row, branch)[1] or "empty",
+                ]
+            )
+    return sorted(rows, key=lambda cells: (int(cells[0]) if str(cells[0]).isdigit() else 0, cells[1], cells[2]))
+
+
+def movel_xy_records(
+    success: Iterable[dict[str, str]],
+    tests_by_id: dict[str, dict[str, str]],
+    metric: str,
+) -> list[dict[str, object]]:
+    records: list[dict[str, object]] = []
+    seen: set[tuple[str, str, str]] = set()
+
+    for row in success:
+        test_id = row.get("testId", "")
+        test = tests_by_id.get(test_id)
+        if not test:
+            continue
+        for branch, column in (("S", "MatchesShort"), ("L", "MatchesLong")):
+            if not as_bool(row.get(column)):
+                continue
+            key = ("Successful", test_id, branch)
+            if key in seen:
+                continue
+            seen.add(key)
+            value, axis = legacy_branch_metric_max(test, branch, metric)
+            path_length = test_path_length(test)
+            rot_length = test_rot_length(test)
+            if not math.isfinite(path_length) or not math.isfinite(rot_length) or not math.isfinite(value):
+                continue
+            records.append(
+                {
+                    "outcome": "Successful",
+                    "testId": test_id,
+                    "branch": branch,
+                    "PathLength": path_length,
+                    "RotLength": rot_length,
+                    "PlotRotLength": 360.0 - rot_length if branch == "L" else rot_length,
+                    "value": value,
+                    "axis": axis,
+                }
+            )
+
+    return records
+
+
+
+
+def padded_extent(values: list[float], minimum_pad: float = 1.0) -> tuple[float, float]:
+    finite = [value for value in values if math.isfinite(value)]
+    if not finite:
+        return 0.0, 1.0
+    low = min(finite)
+    high = max(finite)
+    if low == high:
+        pad = max(abs(low) * 0.05, minimum_pad)
+    else:
+        pad = max((high - low) * 0.05, minimum_pad)
+    return low - pad, high + pad
+
+
+def nice_svg_ticks(low: float, high: float, count: int = 5) -> list[float]:
+    if low == high:
+        return [low]
+    span = high - low
+    raw_step = span / max(count - 1, 1)
+    power = 10 ** math.floor(math.log10(raw_step))
+    step = min((1, 2, 5, 10), key=lambda value: abs(value * power - raw_step)) * power
+    start = math.ceil(low / step) * step
+    ticks: list[float] = []
+    current = start
+    while current <= high + step * 0.5:
+        ticks.append(current)
+        current += step
+    return ticks
+
+
+def color_scale(value: float, low: float, high: float) -> str:
+    if not math.isfinite(value):
+        return "#94a3b8"
+    ratio = 0.5 if high <= low else max(0.0, min(1.0, (value - low) / (high - low)))
+    stops = [(19, 120, 107), (245, 158, 11), (220, 38, 38)]
+    if ratio <= 0.5:
+        local = ratio * 2
+        a, b = stops[0], stops[1]
+    else:
+        local = (ratio - 0.5) * 2
+        a, b = stops[1], stops[2]
+    red = round(a[0] + (b[0] - a[0]) * local)
+    green = round(a[1] + (b[1] - a[1]) * local)
+    blue = round(a[2] + (b[2] - a[2]) * local)
+    return f"#{red:02x}{green:02x}{blue:02x}"
+
+
+def make_movel_xy_svg(title: str, records: list[dict[str, object]], metric_label: str) -> str:
+    width = 1220
+    height = 560
+    margin_left = 78
+    margin_right = 44
+    margin_top = 82
+    margin_bottom = 118
+    gap_x = 54
+    gap_y = 0
+    panel_width = (width - margin_left - margin_right - gap_x) / 2
+    panel_height = height - margin_top - margin_bottom
+    x_min, x_max = padded_extent([float(row["PathLength"]) for row in records])
+    y_min, y_max = 0.0, 360.0
+    finite_values = [float(row["value"]) for row in records if math.isfinite(float(row["value"]))]
+    value_min = min(finite_values) if finite_values else 0.0
+    value_max = max(finite_values) if finite_values else 1.0
+
+    def panel_origin(index: int) -> tuple[float, float]:
+        col = index % 2
+        row = index // 2
+        return margin_left + col * (panel_width + gap_x), margin_top + row * (panel_height + gap_y)
+
+    def x_scale(value: float, left: float) -> float:
+        return left + (value - x_min) / (x_max - x_min) * panel_width
+
+    def y_scale(value: float, top: float) -> float:
+        return top + panel_height - (value - y_min) / (y_max - y_min) * panel_height
+
+    panel_defs = [
+        ("Successful", "S", "Successful Short"),
+        ("Successful", "L", "Successful Long"),
+    ]
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}">',
+        "<style>",
+        "svg{background:#f8fafc;color:#111827;font-family:Segoe UI,Arial,sans-serif}",
+        ".title{font-size:24px;font-weight:700;fill:#111827}",
+        ".subtitle,.legend{font-size:13px;fill:#4b5563}",
+        ".legend-title{font-size:13px;font-weight:650;fill:#111827}",
+        ".panel-title{font-size:15px;font-weight:700;fill:#111827}",
+        ".plot-bg{fill:#ffffff;stroke:#d1d5db;stroke-width:1}",
+        ".grid{stroke:#e5e7eb;stroke-width:1}",
+        ".axis{stroke:#374151;stroke-width:1.2}",
+        ".tick{font-size:11px;fill:#4b5563}",
+        ".axis-label{font-size:13px;font-weight:650;fill:#374151}",
+        "</style>",
+        f'<text x="{margin_left}" y="36" class="title">{html.escape(title)}</text>',
+        f'<text x="{width - margin_right}" y="36" text-anchor="end" class="subtitle">n={len(records)} test/branch points</text>',
+    ]
+
+    for index, (outcome, branch, panel_title) in enumerate(panel_defs):
+        left, top = panel_origin(index)
+        bottom = top + panel_height
+        right = left + panel_width
+        panel_records = [
+            row for row in records if row["outcome"] == outcome and row["branch"] == branch
+        ]
+        parts.append(
+            f'<text x="{left}" y="{top - 18}" class="panel-title">{html.escape(panel_title)} ({len(panel_records)})</text>'
+        )
+        parts.append(f'<rect x="{left}" y="{top}" width="{panel_width}" height="{panel_height}" class="plot-bg"/>')
+        for tick in (0.0, 90.0, 180.0, 270.0, 360.0):
+            y = y_scale(tick, top)
+            parts.append(f'<line x1="{left}" y1="{y:.2f}" x2="{right}" y2="{y:.2f}" class="grid"/>')
+            parts.append(f'<text x="{left - 10}" y="{y + 4:.2f}" text-anchor="end" class="tick">{fmt_num(tick)}</text>')
+        for tick in nice_svg_ticks(x_min, x_max):
+            x = x_scale(tick, left)
+            parts.append(f'<line x1="{x:.2f}" y1="{top}" x2="{x:.2f}" y2="{bottom}" class="grid"/>')
+            parts.append(f'<text x="{x:.2f}" y="{bottom + 22}" text-anchor="middle" class="tick">{fmt_num(tick)}</text>')
+        parts.append(f'<line x1="{left}" y1="{bottom}" x2="{right}" y2="{bottom}" class="axis"/>')
+        parts.append(f'<line x1="{left}" y1="{top}" x2="{left}" y2="{bottom}" class="axis"/>')
+        parts.append(f'<text x="{left + panel_width / 2}" y="{bottom + 48}" text-anchor="middle" class="axis-label">PathLength [mm]</text>')
+        parts.append(
+            f'<text x="{left - 54}" y="{top + panel_height / 2}" transform="rotate(-90 {left - 54} {top + panel_height / 2})" '
+            f'text-anchor="middle" class="axis-label">RotLength [deg]</text>'
+        )
+        for row in panel_records:
+            value = float(row["value"])
+            axis = int(row["axis"]) if row["axis"] else 0
+            tooltip = (
+                f"testId={html.escape(str(row['testId']))}, branch={html.escape(str(row['branch']))}&#10;"
+                f"outcome={html.escape(str(row['outcome']))}&#10;"
+                f"PathLength={float(row['PathLength']):.6g} mm&#10;"
+                f"RotLength={float(row['RotLength']):.6g} deg, plotted={float(row['PlotRotLength']):.6g} deg&#10;"
+                f"{html.escape(metric_label)}={value:.6g}, axis={fmt_axis(axis)}"
+            )
+            parts.append(
+                f'<circle cx="{x_scale(float(row["PathLength"]), left):.2f}" cy="{y_scale(float(row["PlotRotLength"]), top):.2f}" '
+                f'r="4.0" fill="{color_scale(value, value_min, value_max)}" opacity="0.78" stroke="#111827" stroke-width="0.35">'
+                f"<title>{tooltip}</title></circle>"
+            )
+
+    legend_x = margin_left
+    legend_y = height - 72
+    legend_width = 420
+    legend_height = 14
+    legend_segments = 70
+    parts.append(f'<text x="{legend_x}" y="{legend_y - 14}" class="legend-title">{html.escape(metric_label)} color legend</text>')
+    for index in range(legend_segments):
+        ratio = index / max(legend_segments - 1, 1)
+        value = value_min + (value_max - value_min) * ratio
+        x = legend_x + legend_width * index / legend_segments
+        segment_width = legend_width / legend_segments + 0.7
+        parts.append(
+            f'<rect x="{x:.2f}" y="{legend_y}" width="{segment_width:.2f}" height="{legend_height}" '
+            f'fill="{color_scale(value, value_min, value_max)}"/>'
+        )
+    parts.append(
+        f'<rect x="{legend_x}" y="{legend_y}" width="{legend_width}" height="{legend_height}" '
+        f'fill="none" stroke="#374151" stroke-width="0.8"/>'
+    )
+    for ratio in (0.0, 0.25, 0.5, 0.75, 1.0):
+        value = value_min + (value_max - value_min) * ratio
+        x = legend_x + legend_width * ratio
+        parts.append(f'<line x1="{x:.2f}" y1="{legend_y + legend_height}" x2="{x:.2f}" y2="{legend_y + legend_height + 5}" stroke="#374151" stroke-width="0.8"/>')
+        parts.append(f'<text x="{x:.2f}" y="{legend_y + legend_height + 21}" text-anchor="middle" class="tick">{fmt_num(value)}</text>')
+    parts.append(
+        f'<text x="{legend_x + legend_width + 28}" y="{legend_y + 11}" class="legend">'
+        "Long panels use 360 - RotLength.</text>"
+    )
+    parts.append("</svg>")
+    return "\n".join(parts)
 
 
 def branch_label(row: dict[str, str]) -> str:
@@ -373,6 +699,15 @@ def legacy_branch_label(row: dict[str, str]) -> str:
     return "none"
 
 
+def legacy_matched_branches(row: dict[str, str]) -> list[str]:
+    branches: list[str] = []
+    if as_bool(row.get("MatchesShort")):
+        branches.append("S")
+    if as_bool(row.get("MatchesLong")):
+        branches.append("L")
+    return branches
+
+
 def branch_name(branch: str) -> str:
     return "Short" if branch == "S" else "Long"
 
@@ -381,16 +716,8 @@ def branch_ok(row: dict[str, str], branch: str) -> bool:
     return as_bool(row.get("bOKshort" if branch == "S" else "bOKlong"))
 
 
-def branch_vector(row: dict[str, str], family: str, branch: str) -> list[float]:
-    return joint_vector(row, f"{family}{branch_name(branch)}")
 
 
-def branch_jump(row: dict[str, str], branch: str) -> float:
-    prefix = "ControlShortMaxAx" if branch == "S" else "ControlLongMaxAx"
-    columns = [f"{prefix}{axis}" for axis in (1, 4, 6)]
-    values = [as_float(row.get(column)) for column in columns]
-    finite = [value for value in values if math.isfinite(value)]
-    return max(finite) if finite else math.nan
 
 
 def branch_axis_jump(row: dict[str, str], family: str, branch: str, axis: int) -> float:
@@ -406,14 +733,6 @@ def branch_finest(row: dict[str, str], branch: str) -> float:
     return as_float(row.get(column))
 
 
-def pathl_finest_step(row: dict[str, str], tests_by_id: dict[str, dict[str, str]]) -> float:
-    test = tests_by_id.get(row.get("testId", ""))
-    if not test:
-        return math.nan
-    branch = row.get("branch S/L", "")
-    if branch not in ("S", "L"):
-        return math.nan
-    return branch_finest(test, branch)
 
 
 def branch_status(row: dict[str, str], branch: str) -> tuple[bool, str]:
@@ -422,16 +741,23 @@ def branch_status(row: dict[str, str], branch: str) -> tuple[bool, str]:
     return as_bool(row.get("bOKlong")), as_upper(row.get("stErrLong"))
 
 
+
+
+
+
+
+
+
+
+
+
 def main() -> int:
     args = parse_args()
     root = Path(args.root)
     version = args.version
     profile = load_profile(root / args.config)
     joint_tol = float(profile["joint_abs_tolerance_deg"])
-    finest_step_limit = float(profile["finest_step_limit"])
-    max_joint_jump_deg = float(profile["max_joint_jump_deg"])
-    path_warn = float(profile["path_distance_warn_mm"])
-    rot_warn = float(profile["rotation_distance_warn_deg"])
+    legacy_max_win2_limit = float(profile["legacy_max_win2_limit_deg"])
     invalid_abs_min = float(profile["invalid_joint_abs_min"])
     max_rows = int(profile["max_anomaly_rows"])
 
@@ -442,64 +768,39 @@ def main() -> int:
     success = read_csv(success_path)
     pathl = read_csv(pathl_path)
 
+    test_path_length_stats = stats_summary(test_path_length(row) for row in tests)
+    test_rot_length_stats = stats_summary(test_rot_length(row) for row in tests)
+    test_finest_step_stats = stats_summary(
+        branch_finest(row, branch)
+        for row in tests
+        for branch in ("S", "L")
+    )
+
     tests_by_id = {row["testId"]: row for row in tests}
     success_by_test: dict[str, list[dict[str, str]]] = defaultdict(list)
     for row in success:
         success_by_test[row["testId"]].append(row)
+    missing_success = sorted(set(tests_by_id) - set(success_by_test), key=lambda value: int(value))
 
-    missing_success = sorted(set(tests_by_id) - set(success_by_test), key=lambda x: int(x))
-
-    successful_branch_keys = {
-        (row["testId"], branch_label(row)) for row in success if branch_label(row) in ("S", "L")
+    successful_legacy_branch_keys = {
+        (row["testId"], branch)
+        for row in success
+        for branch in legacy_matched_branches(row)
+    }
+    conf_id_sets_by_branch: dict[tuple[str, str], set[str]] = defaultdict(set)
+    for row in success:
+        for branch in legacy_matched_branches(row):
+            conf_id_sets_by_branch[(row["testId"], branch)].add(row.get("confId", ""))
+    conf_ids_by_branch = {
+        key: sorted(values, key=lambda value: (not value.isdigit(), int(value) if value.isdigit() else value))
+        for key, values in conf_id_sets_by_branch.items()
     }
 
-    found_branch_counts = Counter()
-    unsuccessful_found_counts = Counter()
-    for row in tests:
-        test_id = row["testId"]
-        for branch in ("S", "L"):
-            if not branch_ok(row, branch):
-                continue
-            found_branch_counts[branch] += 1
-            if (test_id, branch) not in successful_branch_keys:
-                unsuccessful_found_counts[branch] += 1
-
-    unsuccessful_found_stats: list[list[object]] = []
-    for branch in ("S", "L"):
-        rows = [
-            row
-            for row in tests
-            if branch_ok(row, branch) and (row["testId"], branch) not in successful_branch_keys
-        ]
-        finest_stats = stats_summary(branch_finest(row, branch) for row in rows)
-        jump_stats = stats_summary(branch_jump(row, branch) for row in rows)
-        found_count = found_branch_counts[branch]
-        unsuccessful_count = unsuccessful_found_counts[branch]
-        unsuccessful_pct = (unsuccessful_count / found_count * 100.0) if found_count else math.nan
-        unsuccessful_found_stats.append(
-            [
-                branch,
-                found_count,
-                unsuccessful_count,
-                fmt_num(unsuccessful_pct),
-                fmt_num(float(finest_stats["median"])),
-                fmt_num(float(finest_stats["p95"])),
-                fmt_num(float(finest_stats["max"])),
-                fmt_num(float(jump_stats["median"])),
-                fmt_num(float(jump_stats["p95"])),
-                fmt_num(float(jump_stats["max"])),
-            ]
-        )
-
-    mismatch_rows: list[list[object]] = []
-    control_rows: list[list[object]] = []
-    legacy_rows: list[list[object]] = []
-    xor_rows: list[list[object]] = []
     max_deltas = Counter()
-    control_mismatches = Counter()
-    legacy_mismatches = Counter()
     branch_compare = Counter()
-    worst_delta = ("", "", Delta(0.0, 0, [], True))
+    xor_rows: list[list[object]] = []
+    legacy_xor_rows: list[list[object]] = []
+    control_xor_violation_keys: set[tuple[str, str]] = set()
 
     for row in success:
         test_id = row["testId"]
@@ -507,846 +808,338 @@ def main() -> int:
         c = joint_vector(row, "C")
         calc = joint_vector(row, "CalcC")
         path = joint_vector(row, "PathL")
-        comparisons = [
+        for name, delta in (
             ("C vs CalcC", vector_delta(c, calc, invalid_abs_min)),
             ("C vs PathL", vector_delta(c, path, invalid_abs_min)),
-            ("CalcC vs PathL", vector_delta(calc, path, invalid_abs_min)),
-        ]
-        for name, delta in comparisons:
-            if delta.valid and delta.max_abs > worst_delta[2].max_abs:
-                worst_delta = (test_id, name, delta)
+        ):
             if not delta.valid or delta.max_abs > joint_tol:
                 max_deltas[name] += 1
-                mismatch_rows.append(
-                    [
-                        test_id,
-                        conf_id,
-                        name,
-                        fmt_num(delta.max_abs),
-                        delta.axis or "n/a",
-                        branch_label(row),
-                    ]
-                )
 
-        test = tests_by_id.get(test_id)
         control_short = as_bool(row.get("ControlMatchShort"))
         control_long = as_bool(row.get("ControlMatchLong"))
         if control_short == control_long:
+            control_xor_violation_keys.add((test_id, conf_id))
             xor_rows.append([test_id, conf_id, control_short, control_long])
 
-        control_selected = branch_label(row)
-        legacy_selected = legacy_branch_label(row)
-        branch_compare[(control_selected, legacy_selected)] += 1
-        if test:
-            if control_selected in ("S", "L"):
-                control_delta = vector_delta(
-                    c, branch_vector(test, "Control", control_selected), invalid_abs_min
-                )
-                if not control_delta.valid or control_delta.max_abs > joint_tol:
-                    control_mismatches[control_selected] += 1
-                    control_rows.append(
-                        [
-                            test_id,
-                            conf_id,
-                            control_selected,
-                            f"Control{branch_name(control_selected)}",
-                            fmt_num(control_delta.max_abs),
-                            control_delta.axis or "n/a",
-                        ]
-                    )
-            if legacy_selected in ("S", "L"):
-                legacy_delta = vector_delta(
-                    c, branch_vector(test, "Lift", legacy_selected), invalid_abs_min
-                )
-                if not legacy_delta.valid or legacy_delta.max_abs > joint_tol:
-                    legacy_mismatches[legacy_selected] += 1
-                    legacy_rows.append(
-                        [
-                            test_id,
-                            conf_id,
-                            legacy_selected,
-                            f"Lift{branch_name(legacy_selected)}",
-                            fmt_num(legacy_delta.max_abs),
-                            legacy_delta.axis or "n/a",
-                        ]
-                    )
+        legacy_short = as_bool(row.get("MatchesShort"))
+        legacy_long = as_bool(row.get("MatchesLong"))
+        if legacy_short == legacy_long:
+            legacy_xor_rows.append([test_id, conf_id, legacy_short, legacy_long])
 
-    branch_samples: list[dict[str, object]] = []
-    correlation_rows: list[list[object]] = []
-    for row in tests:
-        test_id = row["testId"]
-        for branch in ("S", "L"):
-            successful = (test_id, branch) in successful_branch_keys
-            branch_samples.append({"branch": branch, "successful": successful, "row": row})
+        branch_compare[(branch_label(row), legacy_branch_label(row))] += 1
 
-    finest_step_rows: list[list[object]] = []
-    for branch in ("S", "L"):
-        successful_rows = [
-            sample["row"]
-            for sample in branch_samples
-            if sample["branch"] == branch and sample["successful"]
-        ]
-        found_unsuccessful_rows = [
-            sample["row"]
-            for sample in branch_samples
-            if sample["branch"] == branch
-            and not sample["successful"]
-            and branch_ok(sample["row"], branch)
-        ]
-        finest_step_rows.append(finest_step_stats_row(f"{branch} successful", successful_rows, branch))
-        finest_step_rows.append(
-            finest_step_stats_row(f"{branch} found unsuccessful", found_unsuccessful_rows, branch)
-        )
-
-    jump_rows: list[list[object]] = []
-    for branch in ("S", "L"):
-        for successful, label in ((True, "successful"), (False, "unsuccessful")):
-            matching_rows = [
-                sample["row"]
-                for sample in branch_samples
-                if sample["branch"] == branch and sample["successful"] == successful
-            ]
-            for axis in (1, 4, 6):
-                jump_rows.append(
-                    jump_stats_row(f"{branch} ControlMaxAx{axis} {label}", matching_rows, branch, axis)
-                )
-
-    successful_branch_rows = [
+    legacy_branch_samples = [
+        {"branch": branch, "successful": (row["testId"], branch) in successful_legacy_branch_keys, "row": row}
+        for row in tests
+        for branch in ("S", "L")
+    ]
+    successful_legacy_branch_rows = [
         (sample["row"], str(sample["branch"]))
-        for sample in branch_samples
+        for sample in legacy_branch_samples
         if sample["successful"]
     ]
-    found_unsuccessful_branch_rows = [
-        (sample["row"], str(sample["branch"]))
-        for sample in branch_samples
-        if not sample["successful"] and branch_ok(sample["row"], str(sample["branch"]))
-    ]
-    legacy_max_ax_boundary_rows = [
-        legacy_max_ax_boundary_row(
-            "successful",
-            successful_branch_rows,
-        ),
-        legacy_max_ax_boundary_row(
-            "found unsuccessful",
-            found_unsuccessful_branch_rows,
-        ),
-    ]
-
-    legacy_max_ax_example_rows: list[list[object]] = []
-    for label, rows in (
-        ("successful", successful_branch_rows),
-        ("found unsuccessful", found_unsuccessful_branch_rows),
-    ):
-        ranked_rows = sorted(
-            rows,
-            key=lambda item: legacy_max_ax_row_value(item[0], item[1])[0],
-            reverse=True,
+    successful_legacy_branch_rows_by_branch = {
+        branch: [(row, row_branch) for row, row_branch in successful_legacy_branch_rows if row_branch == branch]
+        for branch in ("S", "L")
+    }
+    aggregated_jump_summary_by_branch = {
+        branch: aggregated_jump_summary_rows(
+            successful_legacy_branch_rows_by_branch[branch],
+            conf_ids_by_branch,
         )
-        for row, branch in ranked_rows[:10]:
-            values = legacy_max_ax_values(row, branch)
-            max_value, max_axis = legacy_max_ax_row_value(row, branch)
-            legacy_max_ax_example_rows.append(
-                [
-                    label,
-                    row["testId"],
-                    branch,
-                    fmt_num(values[1]),
-                    fmt_num(values[4]),
-                    fmt_num(values[6]),
-                    f"Ax{max_axis}" if max_axis else "n/a",
-                    fmt_num(max_value),
-                    fmt_num(branch_finest(row, branch)),
-                    branch_status(row, branch)[1] or "empty",
-                ]
-            )
-
-    legacy_jump_rows: list[list[object]] = []
-    for branch in ("S", "L"):
-        matching_target_rows = [
-            row
-            for row in tests
-            if vector_delta(
-                branch_vector(row, "Control", branch),
-                branch_vector(row, "Lift", branch),
-                invalid_abs_min,
-            ).valid
-            and vector_delta(
-                branch_vector(row, "Control", branch),
-                branch_vector(row, "Lift", branch),
-                invalid_abs_min,
-            ).max_abs
-            <= joint_tol
-        ]
-        for axis in (1, 4, 6):
-            control_values = [branch_axis_jump(row, "Control", branch, axis) for row in matching_target_rows]
-            legacy_values = [branch_axis_jump(row, "", branch, axis) for row in matching_target_rows]
-            win_values = [branch_win_jump(row, branch, "Win", axis) for row in matching_target_rows]
-            win2_values = [branch_win_jump(row, branch, "Win2", axis) for row in matching_target_rows]
-            legacy_jump_rows.append(stats_row(f"{branch} legacy MaxAx{axis}", legacy_values))
-            legacy_jump_rows.append(stats_row(f"{branch} legacy WinAx{axis}", win_values))
-            legacy_jump_rows.append(stats_row(f"{branch} legacy Win2Ax{axis}", win2_values))
-            correlation_rows.append(
-                [
-                    branch,
-                    axis,
-                    len(matching_target_rows),
-                    fmt_num(pearson(control_values, legacy_values)),
-                    fmt_num(pearson(control_values, win_values)),
-                    fmt_num(pearson(control_values, win2_values)),
-                ]
-            )
-
-    path_groups: dict[tuple[str, str, str], list[dict[str, str]]] = defaultdict(list)
-    path_max_by_test: dict[str, dict[str, str]] = {}
-    rot_max_by_test: dict[str, dict[str, str]] = {}
-    path_dist_by_mode: dict[str, list[float]] = defaultdict(list)
-    rot_dist_by_mode: dict[str, list[float]] = defaultdict(list)
-    pathl_ratio_diff_values: dict[str, list[float]] = defaultdict(list)
-    pathl_ratio_issue_counts = Counter()
-    pathl_ratio_issue_examples: dict[str, list[list[object]]] = defaultdict(list)
-    pathl_anomaly_row_counts = Counter()
-    pathl_anomaly_dist_values: dict[str, dict[str, list[float]]] = defaultdict(
-        lambda: {"PathDist": [], "Rotdist": []}
+        for branch in ("S", "L")
+    }
+    legacy_max_win2_violation_count = sum(
+        1
+        for row, branch in successful_legacy_branch_rows
+        for axis in (1, 4, 6)
+        if branch_win_jump(row, branch, "Win2", axis) > legacy_max_win2_limit
     )
-    pathl_anomaly_combination_counts = Counter()
-    cfx_bad = 0
-    branch_bad = 0
 
-    def add_pathl_anomaly_stat(label: str, path_dist: float, rot_dist: float) -> None:
-        pathl_anomaly_row_counts[label] += 1
-        if math.isfinite(path_dist):
-            pathl_anomaly_dist_values[label]["PathDist"].append(path_dist)
-        if math.isfinite(rot_dist):
-            pathl_anomaly_dist_values[label]["Rotdist"].append(rot_dist)
-
+    path_groups: dict[tuple[str, str], list[dict[str, str]]] = defaultdict(list)
+    pathl_precision_values: dict[str, list[float]] = defaultdict(list)
+    pathl_precision_by_path_bucket: dict[str, dict[str, list[float]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    pathl_precision_by_rot_bucket: dict[str, dict[str, list[float]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
     for row in pathl:
-        key = (row.get("testId", ""), row.get("confId", ""), row.get("branch S/L", ""))
-        path_groups[key].append(row)
-        path_dist = as_float(row.get("PathDist"))
-        rot_dist = as_float(row.get("Rotdist"))
-        test_id = row.get("testId", "")
-        if math.isfinite(path_dist):
-            previous = path_max_by_test.get(test_id)
-            if previous is None or path_dist > as_float(previous.get("PathDist")):
-                path_max_by_test[test_id] = row
-        if math.isfinite(rot_dist):
-            previous = rot_max_by_test.get(test_id)
-            if previous is None or rot_dist > as_float(previous.get("Rotdist")):
-                rot_max_by_test[test_id] = row
-        cfx_ok = as_bool(row.get("CfxOK"))
-        path_branch_ok = row.get("FoundBranch", "") == row.get("branch S/L", "")
-        if not cfx_ok:
-            cfx_bad += 1
-        if not path_branch_ok:
-            branch_bad += 1
-        anomaly_reasons: list[str] = []
-        if not cfx_ok:
-            anomaly_reasons.append("CfxOK != TRUE")
-        if not path_branch_ok:
-            anomaly_reasons.append("FoundBranch mismatch")
-        if math.isfinite(path_dist) and path_dist > path_warn:
-            anomaly_reasons.append(f"PathDist > {fmt_num(path_warn)} mm")
-        if math.isfinite(rot_dist) and rot_dist > rot_warn:
-            anomaly_reasons.append(f"Rotdist > {fmt_num(rot_warn)} deg")
-        if anomaly_reasons:
-            add_pathl_anomaly_stat("any anomaly", path_dist, rot_dist)
-            for reason in anomaly_reasons:
-                add_pathl_anomaly_stat(reason, path_dist, rot_dist)
-            pathl_anomaly_combination_counts[" + ".join(anomaly_reasons)] += 1
+        path_groups[(row.get("testId", ""), row.get("confId", ""))].append(row)
 
-    pathl_group_rows: list[list[object]] = []
     pathl_bad_group_count = 0
     pathl_bad_pair_count = 0
-    pathl_pair_count = 0
-    pathl_incomplete_pair_rows = 0
-    pathl_group_summaries: list[tuple[float, float, list[object]]] = []
-    for (test_id, conf_id, branch), rows in sorted(
-        path_groups.items(), key=lambda item: (int(item[0][0] or 0), int(item[0][1] or 0), item[0][2])
+    pathl_row_count_distribution = Counter(len(rows) for rows in path_groups.values())
+    common_rows_per_group = (
+        pathl_row_count_distribution.most_common(1)[0][0] if pathl_row_count_distribution else 0
+    )
+    pathl_row_count_consistent = len(pathl_row_count_distribution) <= 1
+    pathl_row_count_even = all(row_count % 2 == 0 for row_count in pathl_row_count_distribution)
+
+    for (test_id, conf_id), rows in sorted(
+        path_groups.items(), key=lambda item: (int(item[0][0] or 0), int(item[0][1] or 0))
     ):
-        if len(rows) != PATHL_EXPECTED_ROWS_PER_BRANCH:
+        if (not pathl_row_count_consistent and len(rows) != common_rows_per_group) or len(rows) % 2:
             pathl_bad_group_count += 1
-            pathl_group_rows.append([test_id, conf_id, branch, len(rows), PATHL_EXPECTED_ROWS_PER_BRANCH])
-        if len(rows) % 2:
-            pathl_incomplete_pair_rows += 1
 
-        path_length = as_float(rows[0].get("PathLenth")) if rows else math.nan
-        rot_length = as_float(rows[0].get("RotLength")) if rows else math.nan
-        short_group_row = pathl_short_group_stats_row(test_id, conf_id, branch, rows)
-        if short_group_row:
-            pathl_group_summaries.append((path_length, rot_length, short_group_row))
-
-        for row_index, sample_row in enumerate(rows):
-            mode = "PathRatio" if row_index % 2 == 0 else "RotRatio"
-            path_dist = as_float(sample_row.get("PathDist"))
-            rot_dist = as_float(sample_row.get("Rotdist"))
-            if math.isfinite(path_dist):
-                path_dist_by_mode[mode].append(path_dist)
-            if math.isfinite(rot_dist):
-                rot_dist_by_mode[mode].append(rot_dist)
-
-        previous_path_ratio = math.nan
-        previous_rot_ratio = math.nan
         for pair_index in range(len(rows) // 2):
             path_row = rows[pair_index * 2]
             rot_row = rows[pair_index * 2 + 1]
-            expected_ratio = (pair_index + 1) / PATHL_SAMPLES_PER_BRANCH
-            pathl_pair_count += 1
+            path_expected_ratio = pathl_expected_ratio(path_row, pair_index)
+            rot_expected_ratio = pathl_expected_ratio(rot_row, pair_index)
 
             path_ratio = used_ratio_value(path_row.get("RatioPath"))
             path_ratio_rot_column = as_float(path_row.get("RatioRot"))
             rot_ratio_path_column = as_float(rot_row.get("RatioPath"))
             rot_ratio = used_ratio_value(rot_row.get("RatioRot"))
-            path_expected_diff = abs(path_ratio - expected_ratio)
-            rot_expected_diff = abs(rot_ratio - expected_ratio)
-            pair_ratio_diff = abs(path_ratio - rot_ratio)
-            pathl_ratio_diff_values["RatioPath vs expected"].append(path_expected_diff)
-            pathl_ratio_diff_values["RatioRot vs expected"].append(rot_expected_diff)
-            pathl_ratio_diff_values["RatioPath vs RatioRot"].append(pair_ratio_diff)
+            path_expected_diff = abs(path_ratio - path_expected_ratio)
+            rot_expected_diff = abs(rot_ratio - rot_expected_ratio)
+            path_length = pathl_path_length(path_row)
+            rot_length = as_float(path_row.get("RotLength"))
+            path_bucket = bucket_label(path_length, PATHL_PATH_LENGTH_BUCKETS)
+            rot_bucket = bucket_label(rot_length, PATHL_ROT_LENGTH_BUCKETS)
+            metric_values = {
+                "PathRatio error": path_expected_diff,
+                "RotRatio error": rot_expected_diff,
+                "PathDist from PathRatio rows": as_float(path_row.get("PathDist")),
+                "PathDist from RotRatio rows": as_float(rot_row.get("PathDist")),
+                "RotDist from PathRatio rows": pathl_rot_dist(path_row),
+                "RotDist from RotRatio rows": pathl_rot_dist(rot_row),
+            }
+            for metric, value in metric_values.items():
+                add_metric(pathl_precision_values, metric, value)
+                add_metric(pathl_precision_by_path_bucket[path_bucket], metric, value)
+                add_metric(pathl_precision_by_rot_bucket[rot_bucket], metric, value)
 
-            problems: list[str] = []
-            if not math.isfinite(path_ratio):
-                problems.append("odd row is not PathRatio")
-            if not math.isfinite(rot_ratio):
-                problems.append("even row is not RotRatio")
-            if math.isfinite(path_ratio) and not (0.0 <= path_ratio <= 1.0):
-                problems.append("RatioPath outside 0..1")
-            if math.isfinite(rot_ratio) and not (0.0 <= rot_ratio <= 1.0):
-                problems.append("RatioRot outside 0..1")
-            if not is_unused_ratio_marker(path_ratio_rot_column):
-                problems.append("odd RatioRot has used value")
-            if not is_unused_ratio_marker(rot_ratio_path_column):
-                problems.append("even RatioPath has used value")
-            if path_expected_diff > PATHL_RATIO_TOL:
-                problems.append("RatioPath differs from sample")
-            if rot_expected_diff > PATHL_RATIO_TOL:
-                problems.append("RatioRot differs from sample")
-            if pair_index > 0:
-                if math.isfinite(path_ratio) and math.isfinite(previous_path_ratio) and not (
-                    path_ratio > previous_path_ratio
-                ):
-                    problems.append("RatioPath not increasing")
-                if math.isfinite(rot_ratio) and math.isfinite(previous_rot_ratio) and not (
-                    rot_ratio > previous_rot_ratio
-                ):
-                    problems.append("RatioRot not increasing")
-            if pair_ratio_diff > PATHL_RATIO_TOL:
-                problems.append("pair ratios differ")
-
-            if problems:
+            problems = [
+                not math.isfinite(path_ratio),
+                not math.isfinite(rot_ratio),
+                math.isfinite(path_ratio) and not (0.0 <= path_ratio <= 1.0),
+                math.isfinite(rot_ratio) and not (0.0 <= rot_ratio <= 1.0),
+                not is_unused_ratio_sentinel(path_ratio_rot_column),
+                not is_unused_ratio_sentinel(rot_ratio_path_column),
+            ]
+            if any(problems):
                 pathl_bad_pair_count += 1
-                pathl_ratio_issue_counts.update(problems)
-                for problem in problems:
-                    if (
-                        problem in PATHL_RATIO_EXAMPLE_PROBLEMS
-                        and len(pathl_ratio_issue_examples[problem]) < PATHL_RATIO_EXAMPLE_LIMIT
-                    ):
-                        pathl_ratio_issue_examples[problem].append(
-                            [
-                                problem,
-                                test_id,
-                                conf_id,
-                                branch,
-                                fmt_num(as_float(path_row.get("PathLenth"))),
-                                fmt_num(as_float(path_row.get("RotLength"))),
-                                pair_index + 1,
-                                fmt_num(expected_ratio),
-                                fmt_num(previous_path_ratio),
-                                fmt_num(path_ratio),
-                                fmt_num(rot_ratio),
-                                "PathRatio",
-                                "RotRatio",
-                                fmt_num(as_float(path_row.get("PathDist"))),
-                                fmt_num(as_float(rot_row.get("Rotdist"))),
-                            ]
-                        )
 
-            previous_path_ratio = path_ratio
-            previous_rot_ratio = rot_ratio
-
-    worst_path_tests = sorted(
-        path_max_by_test.items(), key=lambda item: as_float(item[1].get("PathDist")), reverse=True
-    )[:10]
-    worst_rot_tests = sorted(
-        rot_max_by_test.items(), key=lambda item: as_float(item[1].get("Rotdist")), reverse=True
-    )[:10]
-
-    branch_counts = Counter(branch_label(row) for row in success)
-    legacy_branch_counts = Counter(legacy_branch_label(row) for row in success)
-    success_tests = len(success_by_test)
-    lines: list[str] = []
-    lines.extend(
-        [
-            f"# ABB MoveL Analysis {version}",
-            "",
-            "## Summary",
-            "",
-            f"- Tests: {len(tests)}",
-            f"- Tests with success rows: {success_tests}",
-            f"- Success rows: {len(success)}",
-            f"- Tests without success rows: {len(missing_success)}",
-            f"- PathL diagnostic rows: {len(pathl)}",
-            f"- PathL groups by test/conf/branch: {len(path_groups)}",
-            f"- Joint tolerance: {joint_tol} deg",
-            f"- Path distance warning: {path_warn} mm",
-            f"- Rotation distance warning: {rot_warn} deg",
-            "",
-            "## Found But Unsuccessful Branches",
-            "",
-            "These are only context: `success.csv` is the evaluated set because those MoveL attempts actually ran through.",
-            "",
-            f"- Found branches in tests.csv: S={found_branch_counts['S']}, L={found_branch_counts['L']}",
-            f"- Found branches without matching successful control branch: S={unsuccessful_found_counts['S']}, L={unsuccessful_found_counts['L']}",
-            "",
-        ]
+    pathl_pairing_status = (
+        "OK"
+        if pathl_row_count_consistent and pathl_row_count_even and pathl_bad_pair_count == 0
+        else "FAIL"
     )
-    lines.extend(
-        md_table(
-            [
-                "branch",
-                "found",
-                "unsuccessful",
-                "unsuccessful %",
-                "FinestStep median",
-                "FinestStep p95",
-                "FinestStep max",
-                "jump median",
-                "jump p95",
-                "jump max",
-            ],
-            unsuccessful_found_stats,
+    pathl_pairing_rows_text = (
+        f"{common_rows_per_group} rows per group"
+        if pathl_row_count_consistent and path_groups
+        else "row counts " + (
+            ", ".join(
+                f"{row_count} rows: {group_count} groups"
+                for row_count, group_count in sorted(pathl_row_count_distribution.items())
+            ) or "no groups"
         )
     )
+    pathl_pairing_sentence = (
+        f"PathL pairing check: {pathl_pairing_status}, {len(path_groups)} testId/confId groups, "
+        f"{pathl_pairing_rows_text}, {pathl_bad_group_count} row count issues, "
+        f"{pathl_bad_pair_count} pair issues."
+    )
+    pathl_precision_stat_headers = ["metric", "n", "min", "mean", "median", "p95", "max"]
+    pathl_ratio_precision_rows = [
+        stats_row_full("PathRatio error", pathl_precision_values["PathRatio error"]),
+        stats_row_full("RotRatio error", pathl_precision_values["RotRatio error"]),
+    ]
+    pathl_distance_precision_rows = [
+        stats_row_full(metric, pathl_precision_values[metric])
+        for metric in PATHL_PRECISION_METRICS[2:]
+    ]
+    pathl_path_bucket_labels = [label for _, label in PATHL_PATH_LENGTH_BUCKETS]
+    pathl_rot_bucket_labels = [label for _, label in PATHL_ROT_LENGTH_BUCKETS]
+    pathl_bucket_headers = ["bucket", *pathl_precision_stat_headers]
 
-    lines.extend(
+    no_success_tests = [tests_by_id[test_id] for test_id in missing_success if test_id in tests_by_id]
+    count_table_rows = [
         [
-            "",
-            "## FinestStep Success Boundary",
-            "",
-            "`successful` means the branch appears in `success.csv`. `found unsuccessful` means `tests.csv` found the branch, but there is no matching successful control branch.",
-            "",
-        ]
+            "Successful",
+            sum(1 for row in success if as_bool(row.get("ControlMatchShort"))),
+            sum(1 for row in success if as_bool(row.get("ControlMatchLong"))),
+        ],
+        [
+            "No success.csv record",
+            sum(1 for row in no_success_tests if branch_ok(row, "S")),
+            sum(1 for row in no_success_tests if branch_ok(row, "L")),
+        ],
+    ]
+    finest_step_table_rows = [
+        [
+            "Successful",
+            min_fmt(
+                branch_finest(tests_by_id[row["testId"]], "S")
+                for row in success
+                if as_bool(row.get("ControlMatchShort")) and row.get("testId", "") in tests_by_id
+            ),
+            min_fmt(
+                branch_finest(tests_by_id[row["testId"]], "L")
+                for row in success
+                if as_bool(row.get("ControlMatchLong")) and row.get("testId", "") in tests_by_id
+            ),
+        ],
+        [
+            "No success.csv record",
+            min_fmt(branch_finest(row, "S") for row in no_success_tests if branch_ok(row, "S")),
+            min_fmt(branch_finest(row, "L") for row in no_success_tests if branch_ok(row, "L")),
+        ],
+    ]
+    order_violation_rows_by_branch = {
+        branch: legacy_order_violation_rows(successful_legacy_branch_rows_by_branch[branch])
+        for branch in ("S", "L")
+    }
+
+    report_dir = root / "reports"
+    report_dir.mkdir(parents=True, exist_ok=True)
+    xy_maxax_path = report_dir / f"movel_xy_maxax_{version}.svg"
+    xy_maxwin2_path = report_dir / f"movel_xy_maxwin2_{version}.svg"
+    xy_maxax_records = movel_xy_records(success, tests_by_id, "MaxAx")
+    xy_maxwin2_records = movel_xy_records(success, tests_by_id, "MaxWin2")
+    xy_maxax_path.write_text(
+        make_movel_xy_svg(
+            f"MoveL XY Legacy MaxAx {version}",
+            xy_maxax_records,
+            "Legacy MaxAx",
+        ),
+        encoding="utf-8",
     )
-    lines.extend(
-        md_table(
-            ["sample", "n", "min", "mean", "median", "p95", "max"],
-            finest_step_rows,
-        )
+    xy_maxwin2_path.write_text(
+        make_movel_xy_svg(
+            f"MoveL XY Legacy MaxWin2 {version}",
+            xy_maxwin2_records,
+            "Legacy MaxWin2",
+        ),
+        encoding="utf-8",
     )
 
-    lines.extend(
-        [
-            "",
-            "## Joint Target Consistency",
-            "",
-            f"- C/CalcC mismatches: {max_deltas['C vs CalcC']}",
-            f"- C/PathL mismatches: {max_deltas['C vs PathL']}",
-            f"- CalcC/PathL mismatches: {max_deltas['CalcC vs PathL']}",
-            f"- Worst valid delta: test {worst_delta[0]}, {worst_delta[1]}, axis {worst_delta[2].axis}, {fmt_num(worst_delta[2].max_abs)} deg",
-            "",
-        ]
-    )
-    lines.extend(
-        md_table(
-            ["testId", "confId", "comparison", "max abs deg", "axis", "control branch"],
-            mismatch_rows[:max_rows],
-        )
-    )
-    if len(mismatch_rows) > max_rows:
-        lines.append(f"... {len(mismatch_rows) - max_rows} more omitted by report limit.")
+    lines = [
+        f"# ABB MoveL Analysis {version}",
+        "",
+        "## Header Resume",
+        "",
+        f"- Tests: {len(tests)}",
+        f"- Successful runs: {len(success)}",
+        f"- PathLength min/max: {fmt_num(float(test_path_length_stats['min']))}..{fmt_num(float(test_path_length_stats['max']))} mm",
+        f"- RotLength min/max: {fmt_num(float(test_rot_length_stats['min']))}..{fmt_num(float(test_rot_length_stats['max']))} deg",
+        f"- Highest FinestStep in all test data: {fmt_num(float(test_finest_step_stats['max']))} (FinestStepS/L, n={test_finest_step_stats['n']})",
+        f"- Successful runs where C_rax differs from CalcC_rax by > {fmt_num(joint_tol)} deg on any axis: {max_deltas['C vs CalcC']}",
+        f"- Successful runs where C_rax differs from PathL_rax by > {fmt_num(joint_tol)} deg on any axis: {max_deltas['C vs PathL']}",
+        f"- Successful runs where ControlMatchShort XOR ControlMatchLong is false: {len(control_xor_violation_keys)}",
+        f"- Successful runs where MatchesShort XOR MatchesLong is false: {len(legacy_xor_rows)}",
+        "",
+        "## Legacy XOR Violations",
+        "",
+    ]
+    lines.extend(md_table(["testId", "confId", "MatchesShort", "MatchesLong"], legacy_xor_rows[:max_rows]))
+    if len(legacy_xor_rows) > max_rows:
+        lines.append(f"... {len(legacy_xor_rows) - max_rows} more omitted by report limit.")
 
-    lines.extend(
-        [
-            "",
-            "## Branch Matching",
-            "",
-            f"- Control branch counts: S={branch_counts['S']}, L={branch_counts['L']}, none={branch_counts['none']}",
-            f"- ControlMatchShort XOR ControlMatchLong violations: {len(xor_rows)}",
-            f"- C vs selected Control target mismatches: S={control_mismatches['S']}, L={control_mismatches['L']}",
-            f"- Legacy Matches counts: S={legacy_branch_counts['S']}, L={legacy_branch_counts['L']}, none={legacy_branch_counts['none']}",
-            f"- Legacy/control branch disagreements: {sum(count for pair, count in branch_compare.items() if pair[0] != pair[1])}",
-            f"- C vs selected Lift target mismatches: S={legacy_mismatches['S']}, L={legacy_mismatches['L']}",
-            "",
-            "### Control XOR Violations",
-            "",
-        ]
-    )
-    lines.extend(
-        md_table(
-            ["testId", "confId", "ControlMatchShort", "ControlMatchLong"],
-            xor_rows[:max_rows],
-        )
-    )
+    lines.extend(["", "## Control XOR Violations", ""])
+    lines.extend(md_table(["testId", "confId", "ControlMatchShort", "ControlMatchLong"], xor_rows[:max_rows]))
     if len(xor_rows) > max_rows:
         lines.append(f"... {len(xor_rows) - max_rows} more omitted by report limit.")
 
-    lines.extend(
-        [
-            "",
-            "### Control Target Mismatches",
-            "",
-        ]
-    )
-    lines.extend(
-        md_table(
-            ["testId", "confId", "branch", "target", "max abs deg", "axis"],
-            control_rows[:max_rows],
-        )
-    )
-    if len(control_rows) > max_rows:
-        lines.append(f"... {len(control_rows) - max_rows} more omitted by report limit.")
-
-    lines.extend(["", "### Legacy vs Control Branch Comparison", ""])
+    lines.extend(["", "## Legacy vs Control Branch Comparison", ""])
     lines.extend(
         md_table(
             ["control", "legacy", "rows"],
             [[control, legacy, count] for (control, legacy), count in sorted(branch_compare.items())],
         )
     )
-    lines.extend(["", "### Legacy Lift Target Mismatches", ""])
-    lines.extend(
-        md_table(
-            ["testId", "confId", "branch", "target", "max abs deg", "axis"],
-            legacy_rows[:max_rows],
-        )
-    )
-    if len(legacy_rows) > max_rows:
-        lines.append(f"... {len(legacy_rows) - max_rows} more omitted by report limit.")
+
+    lines.extend(["", "## Table 1 - Successful vs No Success Branch Counts", ""])
+    lines.extend(md_table(["outcome", "Short", "Long"], count_table_rows))
 
     lines.extend(
         [
             "",
-            "## Control Jump Boundaries",
+            "## Table 2 - Aggregated Jump Summary",
             "",
-            "`Control[Short/Long]MaxAx[1/4/6]` is treated as the largest adaptive-step jump normalized to 1/1000 sampling. `FinestStep at max` is the adaptive sampling step from the row where the maximum was found.",
-            "",
-        ]
-    )
-    lines.extend(md_table(["sample", "n", "mean", "median", "p95", "max", "FinestStep at max"], jump_rows))
-
-    lines.extend(
-        [
-            "",
-            "## Legacy 1/1000 MaxAx Boundary",
-            "",
-            "`Short/LongMaxAx[1/4/6]` comes from the legacy fixed 1/1000 sampling. `successful` means the exact S/L branch appears in `success.csv`; `found unsuccessful` means `tests.csv` found the branch, but there is no matching successful control branch.",
-            "",
-            "### Successful vs Unsuccessful",
-            "",
-            "This pools all `Short/LongMaxAx1/4/6` values together across both S/L branches and axes 1/4/6, then splits only by success.",
+            "Legacy max-jump statistics are reported only for successful branches where the corresponding `MatchesShort` or `MatchesLong` value is true.",
             "",
         ]
     )
-    max_ax_headers = [
-        "sample",
-        "n",
-        "mean",
-        "median",
-        "p95",
-        "max",
-        "testId at max",
-        "branch",
-        "axis at max",
-        "MaxAx1",
-        "MaxAx4",
-        "MaxAx6",
-    ]
-    lines.extend(md_table(max_ax_headers, legacy_max_ax_boundary_rows))
-    lines.extend(
-        [
-            "",
-            "### Max Examples",
-            "",
-        ]
-    )
-    lines.extend(
-        md_table(
-            [
-                "outcome",
-                "testId",
-                "branch",
-                "MaxAx1",
-                "MaxAx4",
-                "MaxAx6",
-                "max axis",
-                "row max",
-                "FinestStep",
-                "stErr",
-            ],
-            legacy_max_ax_example_rows,
-        )
-    )
-
-    lines.extend(
-        [
-            "",
-            "## Legacy Jump Comparison",
-            "",
-            "Correlations are computed only where the current Control and legacy Lift jointtargets match within tolerance.",
-            "",
-            "### Legacy Jump Statistics",
-            "",
-        ]
-    )
-    lines.extend(md_table(["sample", "n", "mean", "median", "p95", "max"], legacy_jump_rows))
-    lines.extend(["", "### Control vs Legacy Correlation", ""])
-    lines.extend(
-        md_table(
-            ["branch", "axis", "matching targets", "Control/Max", "Control/Win", "Control/Win2"],
-            correlation_rows,
-        )
-    )
-
-    path_dist_values = [as_float(row.get("PathDist")) for row in pathl if math.isfinite(as_float(row.get("PathDist")))]
-    rot_dist_values = [as_float(row.get("Rotdist")) for row in pathl if math.isfinite(as_float(row.get("Rotdist")))]
-    pathl_anomaly_labels = [
-        "any anomaly",
-        "CfxOK != TRUE",
-        "FoundBranch mismatch",
-        f"PathDist > {fmt_num(path_warn)} mm",
-        f"Rotdist > {fmt_num(rot_warn)} deg",
-    ]
-    pathl_anomaly_summary_rows: list[list[object]] = []
-    for label in pathl_anomaly_labels:
-        path_stats = stats_summary(pathl_anomaly_dist_values[label]["PathDist"])
-        rot_stats = stats_summary(pathl_anomaly_dist_values[label]["Rotdist"])
-        row_count = pathl_anomaly_row_counts[label]
-        pathl_anomaly_summary_rows.append(
-            [
-                label,
-                row_count,
-                fmt_num((row_count / len(pathl) * 100.0) if pathl else math.nan),
-                fmt_num(float(path_stats["median"])),
-                fmt_num(float(path_stats["p95"])),
-                fmt_num(float(path_stats["max"])),
-                fmt_num(float(rot_stats["median"])),
-                fmt_num(float(rot_stats["p95"])),
-                fmt_num(float(rot_stats["max"])),
-            ]
-        )
-    pathl_anomaly_combination_rows = [
-        [
-            label,
-            count,
-            fmt_num((count / len(pathl) * 100.0) if pathl else math.nan),
-        ]
-        for label, count in pathl_anomaly_combination_counts.most_common()
-    ]
-    pathl_ratio_issue_count_rows = [[problem, count] for problem, count in pathl_ratio_issue_counts.most_common()]
-    pathl_ratio_issue_count_rows.extend(
-        [problem, 0] for problem in PATHL_RATIO_EXAMPLE_PROBLEMS if problem not in pathl_ratio_issue_counts
-    )
-    pathl_short_length_rows = [
-        row
-        for _, _, row in sorted(
-            pathl_group_summaries,
-            key=lambda item: (not math.isfinite(item[0]), item[0], item[1]),
-        )[:PATHL_SHORT_GROUP_LIMIT]
-    ]
-    pathl_short_rot_rows = [
-        row
-        for _, _, row in sorted(
-            pathl_group_summaries,
-            key=lambda item: (not math.isfinite(item[1]), item[1], item[0]),
-        )[:PATHL_SHORT_GROUP_LIMIT]
-    ]
-    pathl_short_group_headers = [
+    aggregated_jump_summary_headers = [
+        "outcome",
+        "metric",
+        "value",
         "testId",
         "confId",
         "branch",
-        "PathLength",
-        "RotLength",
-        "abs(RatioPath-expected) n",
-        "abs(RatioPath-expected) min",
-        "abs(RatioPath-expected) mean",
-        "abs(RatioPath-expected) median",
-        "abs(RatioPath-expected) p95",
-        "abs(RatioPath-expected) max",
-        "abs(RatioRot-expected) n",
-        "abs(RatioRot-expected) min",
-        "abs(RatioRot-expected) mean",
-        "abs(RatioRot-expected) median",
-        "abs(RatioRot-expected) p95",
-        "abs(RatioRot-expected) max",
+        "axis",
+        "row MaxAx",
+        "row MaxWin",
+        "row MaxWin2",
     ]
-    lines.extend(
-        [
-            "",
-            "## PathL Diagnostics",
-            "",
-            f"- Rows with CfxOK != TRUE: {cfx_bad}",
-            f"- Rows with FoundBranch mismatch: {branch_bad}",
-            f"- Groups with row count != {PATHL_EXPECTED_ROWS_PER_BRANCH}: {pathl_bad_group_count}",
-            f"- Groups with dangling unpaired row: {pathl_incomplete_pair_rows}",
-            f"- Ratio pairs checked: {pathl_pair_count}",
-            f"- Ratio pair/order issues: {pathl_bad_pair_count}",
-            f"- Mean PathDist: {fmt_num(mean(path_dist_values)) if path_dist_values else 'n/a'}",
-            f"- Max PathDist: {fmt_num(max(path_dist_values)) if path_dist_values else 'n/a'}",
-            f"- Mean Rotdist: {fmt_num(mean(rot_dist_values)) if rot_dist_values else 'n/a'}",
-            f"- Max Rotdist: {fmt_num(max(rot_dist_values)) if rot_dist_values else 'n/a'}",
-            "",
-            "### PathL Distance By Ratio Source",
-            "",
-        ]
-    )
-    lines.extend(
-        md_table(
-            ["metric", "n", "mean", "median", "p95", "max"],
-            [
-                stats_row("PathDist measured from PathRatio rows", path_dist_by_mode["PathRatio"]),
-                stats_row("PathDist measured from RotRatio rows", path_dist_by_mode["RotRatio"]),
-                stats_row("Rotdist measured from PathRatio rows", rot_dist_by_mode["PathRatio"]),
-                stats_row("Rotdist measured from RotRatio rows", rot_dist_by_mode["RotRatio"]),
-            ],
+    for branch, title in (("S", "Short branches"), ("L", "Long branches")):
+        lines.extend(["", f"### {title}", ""])
+        lines.extend(md_table(aggregated_jump_summary_headers, aggregated_jump_summary_by_branch[branch]))
+
+    lines.extend(["", "## Table 3 - Minimum FinestStep", ""])
+    lines.extend(md_table(["outcome", "Short", "Long"], finest_step_table_rows))
+
+    lines.extend(["", "## Successful MaxAx < MaxWin < MaxWin2 Violations", ""])
+    for branch, title in (("S", "Short"), ("L", "Long")):
+        rows = order_violation_rows_by_branch[branch]
+        lines.extend(["", f"### {title}", "", f"- Violations: {len(rows)}", ""])
+        lines.extend(
+            md_table(
+                ["testId", "branch", "axis", "MaxAx", "MaxWin", "MaxWin2", "bOK", "stErr"],
+                rows,
+            )
         )
-    )
-    lines.extend(
-        [
-            "",
-            "### PathL Sample Group Issues",
-            "",
-        ]
-    )
-    lines.extend(
-        md_table(
-            ["testId", "confId", "branch", "rows", "expected"],
-            pathl_group_rows[:max_rows],
-        )
-    )
-    if len(pathl_group_rows) > max_rows:
-        lines.append(f"... {len(pathl_group_rows) - max_rows} more omitted by report limit.")
 
     lines.extend(
         [
             "",
-            "### PathL Ratio Difference Statistics",
+            "## XY Graphs",
+            "",
+            f"- Legacy MaxAx: `{xy_maxax_path.as_posix()}`",
+            f"- Legacy MaxWin2: `{xy_maxwin2_path.as_posix()}`",
+            "",
+            "Each SVG has two panels: Successful Short and Successful Long. A branch is included only when the corresponding `MatchesShort` or `MatchesLong` value is true. Long panels plot `360 - RotLength`.",
+            "",
+            "## PathL Ratio Analysis",
+            "",
+            f"- {pathl_pairing_sentence}",
+            "",
+            "### Ratio Precision",
             "",
         ]
     )
+    lines.extend(md_table(pathl_precision_stat_headers, pathl_ratio_precision_rows))
+    lines.extend(["", "### Distance Precision", ""])
+    lines.extend(md_table(pathl_precision_stat_headers, pathl_distance_precision_rows))
+    lines.extend(["", "### PathLength Bucket Precision", ""])
     lines.extend(
         md_table(
-            ["metric", "n", "mean", "median", "p95", "max"],
-            [
-                stats_row("abs(RatioPath - expected 0.01 step)", pathl_ratio_diff_values["RatioPath vs expected"]),
-                stats_row("abs(RatioRot - expected 0.01 step)", pathl_ratio_diff_values["RatioRot vs expected"]),
-                stats_row("abs(RatioPath - RatioRot)", pathl_ratio_diff_values["RatioPath vs RatioRot"]),
-            ],
+            pathl_bucket_headers,
+            metric_bucket_rows(pathl_precision_by_path_bucket, pathl_path_bucket_labels),
         )
     )
-    lines.extend(["", "### Shortest PathLength Ratio Behavior", ""])
-    lines.extend(md_table(pathl_short_group_headers, pathl_short_length_rows))
-    lines.extend(["", "### Shortest RotLength Ratio Behavior", ""])
-    lines.extend(md_table(pathl_short_group_headers, pathl_short_rot_rows))
-    lines.extend(["", "### PathL Ratio Issue Counts", ""])
+    lines.extend(["", "### RotLength Bucket Precision", ""])
     lines.extend(
         md_table(
-            ["problem", "count"],
-            pathl_ratio_issue_count_rows,
+            pathl_bucket_headers,
+            metric_bucket_rows(pathl_precision_by_rot_bucket, pathl_rot_bucket_labels),
         )
-    )
-    lines.extend(["", "### PathL Ratio Issue Examples", ""])
-    lines.extend(
-        md_table(
-            [
-                "problem",
-                "testId",
-                "confId",
-                "branch",
-                "PathLength",
-                "RotLength",
-                "pair",
-                "expected",
-                "previous RatioPath",
-                "RatioPath",
-                "RatioRot",
-                "odd row mode",
-                "even row mode",
-                "odd PathDist",
-                "even Rotdist",
-            ],
-            [
-                row
-                for problem in PATHL_RATIO_EXAMPLE_PROBLEMS
-                for row in pathl_ratio_issue_examples[problem]
-            ],
-        )
-    )
-
-    lines.extend(
-        [
-            "",
-            "### PathL Anomaly Statistics",
-            "",
-        ]
-    )
-    lines.extend(
-        md_table(
-            [
-                "condition",
-                "rows",
-                "% rows",
-                "PathDist median",
-                "PathDist p95",
-                "PathDist max",
-                "Rotdist median",
-                "Rotdist p95",
-                "Rotdist max",
-            ],
-            pathl_anomaly_summary_rows,
-        )
-    )
-    lines.extend(["", "### PathL Anomaly Reason Combinations", ""])
-    lines.extend(md_table(["conditions", "rows", "% rows"], pathl_anomaly_combination_rows))
-
-    lines.extend(["", "### Worst PathDist By Test", ""])
-    lines.extend(
-        md_table(
-            ["testId", "max PathDist", "PathLength", "RotLength", "FinestStep"],
-            [
-                [
-                    test_id,
-                    fmt_num(as_float(row.get("PathDist"))),
-                    fmt_num(as_float(row.get("PathLenth"))),
-                    fmt_num(as_float(row.get("RotLength"))),
-                    fmt_num(pathl_finest_step(row, tests_by_id)),
-                ]
-                for test_id, row in worst_path_tests
-            ],
-        )
-    )
-    lines.extend(["", "### Worst Rotdist By Test", ""])
-    lines.extend(
-        md_table(
-            ["testId", "max Rotdist", "PathLength", "RotLength", "FinestStep"],
-            [
-                [
-                    test_id,
-                    fmt_num(as_float(row.get("Rotdist"))),
-                    fmt_num(as_float(row.get("PathLenth"))),
-                    fmt_num(as_float(row.get("RotLength"))),
-                    fmt_num(pathl_finest_step(row, tests_by_id)),
-                ]
-                for test_id, row in worst_rot_tests
-            ],
-        )
-    )
-
-    lines.extend(
-        [
-            "",
-            "## Suggested Next Investigations",
-            "",
-            "- Treat joint target, XOR, and selected branch mismatches in `success.csv` as primary blockers.",
-            "- Use the unsuccessful branch jump statistics to visualize where the current adaptive checker starts rejecting branches.",
-            "- Use the legacy jump correlations to compare constant 1/1000 sampling against the adaptive implementation.",
-        ]
     )
 
     out_path = Path(args.out) if args.out else root / "reports" / f"movel_analysis_{version}.md"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(out_path)
+    if args.fail_on_maxwin2_limit and legacy_max_win2_violation_count:
+        print(
+            f"legacy MaxWin2 limit exceeded: {legacy_max_win2_violation_count} values > "
+            f"{fmt_num(legacy_max_win2_limit)} deg"
+        )
+        return 1
     return 0
-
 
 if __name__ == "__main__":
     raise SystemExit(main())

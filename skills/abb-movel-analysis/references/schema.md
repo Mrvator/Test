@@ -47,9 +47,9 @@ For each `success` row:
 
 - Compare `C_rax*` vs `CalcC_rax*`.
 - Compare `C_rax*` vs `PathL_rax*`.
-- Compare `CalcC_rax*` vs `PathL_rax*`.
-- If `ControlMatchShort = TRUE`, compare `PathL_rax*` with `tests.ControlShort_rax*`.
-- If `ControlMatchLong = TRUE`, compare `PathL_rax*` with `tests.ControlLong_rax*`.
+- Check that exactly one of `ControlMatchShort` and `ControlMatchLong` is true.
+- Check that exactly one of `MatchesShort` and `MatchesLong` is true.
+- Compare the selected control branch label with the selected legacy branch label.
 - Check the singular branch rule before interpreting successful branch matches.
 
 ## PathL Diagnostics
@@ -63,7 +63,7 @@ For each `pathl` row:
 - `Rotdist`: rotation residual for orientation prediction.
 - `RatioPath` and `RatioRot`: normalized path/rotation progress values.
 
-Flag rows where `CfxOK` is not true, `FoundBranch` differs from `branch S/L`, or distance residuals exceed the configured warning tolerance.
+The compact analyzer summarizes PathL ratio pairing and ratio/distance precision. It does not emit row-level anomaly tables.
 
 ## PathL Ratio Pairing
 
@@ -71,7 +71,8 @@ For each `testId/confId/branch` group, PathL samples are expected to be ordered 
 
 - Odd row in the pair: path-based ratio sample; read `RatioPath`.
 - Even row in the pair: rotation-based ratio sample; read `RatioRot`.
-- Pair index is zero-based in code, but expected ratio is `(pairIndex + 1) / 100`.
+- Newer CSV versions include `ExpectedRatio`; use that as the expected sample value for both path and rotation ratio precision.
+- Older CSV versions without `ExpectedRatio` fall back to `(pairIndex + 1) / 100`, where the pair index is zero-based in code.
 
 Important interpretation rules:
 
@@ -82,8 +83,8 @@ Important interpretation rules:
 - Values in `[0, 0.01]` are not out-of-range. They may be inaccurate for the expected sample, but they are not invalid.
 - Out-of-range means `< 0` or `> 1`.
 - For ratio precision, use absolute error:
-  - odd rows: `abs(RatioPath - expected)`.
-  - even rows: `abs(RatioRot - expected)`.
+  - odd rows: `abs(RatioPath - ExpectedRatio)`.
+  - even rows: `abs(RatioRot - ExpectedRatio)`.
 
 Use these statistics to find practical switching boundaries:
 

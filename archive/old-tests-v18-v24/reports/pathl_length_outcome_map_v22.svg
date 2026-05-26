@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="820" viewBox="0 0 1220 820">
+<style>
+svg{background:#f8fafc;color:#111827;font-family:Segoe UI,Arial,sans-serif}
+.title{font-size:24px;font-weight:700;fill:#111827}
+.subtitle,.legend,.note{font-size:13px;fill:#4b5563}
+.plot-bg{fill:#ffffff;stroke:#d1d5db;stroke-width:1}
+.grid{stroke:#e5e7eb;stroke-width:1}
+.axis{stroke:#374151;stroke-width:1.4}
+.tick{font-size:12px;fill:#4b5563}
+.axis-label{font-size:14px;font-weight:650;fill:#374151}
+.side-title{font-size:14px;font-weight:700;fill:#111827}
+.side-row{font-size:12px;fill:#374151}
+</style>
+<text x="86" y="34" class="title">PathL raw length outcome map</text>
+<text x="1010" y="34" text-anchor="end" class="subtitle">pathl_v22.csv; n=64 test/conf/branch groups</text>
+<rect x="86" y="66" width="924" height="670" class="plot-bg"/>
+<line x1="86" y1="685.42" x2="1010" y2="685.42" class="grid"/>
+<text x="74" y="689.42" text-anchor="end" class="tick">-0.5</text>
+<line x1="86" y1="581.60" x2="1010" y2="581.60" class="grid"/>
+<text x="74" y="585.60" text-anchor="end" class="tick">0</text>
+<line x1="86" y1="477.77" x2="1010" y2="477.77" class="grid"/>
+<text x="74" y="481.77" text-anchor="end" class="tick">0.5</text>
+<line x1="86" y1="373.95" x2="1010" y2="373.95" class="grid"/>
+<text x="74" y="377.95" text-anchor="end" class="tick">1</text>
+<line x1="86" y1="270.12" x2="1010" y2="270.12" class="grid"/>
+<text x="74" y="274.12" text-anchor="end" class="tick">1.5</text>
+<line x1="86" y1="166.30" x2="1010" y2="166.30" class="grid"/>
+<text x="74" y="170.30" text-anchor="end" class="tick">2</text>
+<line x1="145.94" y1="66" x2="145.94" y2="736" class="grid"/>
+<text x="145.94" y="762" text-anchor="middle" class="tick">4</text>
+<line x1="302.13" y1="66" x2="302.13" y2="736" class="grid"/>
+<text x="302.13" y="762" text-anchor="middle" class="tick">6</text>
+<line x1="458.32" y1="66" x2="458.32" y2="736" class="grid"/>
+<text x="458.32" y="762" text-anchor="middle" class="tick">8</text>
+<line x1="614.51" y1="66" x2="614.51" y2="736" class="grid"/>
+<text x="614.51" y="762" text-anchor="middle" class="tick">10</text>
+<line x1="770.70" y1="66" x2="770.70" y2="736" class="grid"/>
+<text x="770.70" y="762" text-anchor="middle" class="tick">12</text>
+<line x1="926.88" y1="66" x2="926.88" y2="736" class="grid"/>
+<text x="926.88" y="762" text-anchor="middle" class="tick">14</text>
+<circle cx="931.91" cy="382.21" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=1, confId=9, branch=S&#10;status=ok&#10;PathLength=14.0643 mm, RotLength=0.9602 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.066279, max RotDist=0.039565</title></circle>
+<circle cx="164.09" cy="393.71" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=2, confId=8, branch=S&#10;status=ok&#10;PathLength=4.2325 mm, RotLength=0.9048 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.025438, max RotDist=0.039565</title></circle>
+<circle cx="540.63" cy="341.58" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=3, confId=9, branch=S&#10;status=ok&#10;PathLength=9.0540 mm, RotLength=1.1559 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.027669, max RotDist=0.039565</title></circle>
+<circle cx="344.02" cy="421.45" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=4, confId=2, branch=S&#10;status=ok&#10;PathLength=6.5364 mm, RotLength=0.7713 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.024382, max RotDist=0.039565</title></circle>
+<circle cx="706.76" cy="408.48" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=6, confId=5, branch=S&#10;status=ok&#10;PathLength=11.1813 mm, RotLength=0.8337 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.032307, max RotDist=0.039565</title></circle>
+<circle cx="722.80" cy="382.21" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=7, confId=2, branch=S&#10;status=ok&#10;PathLength=11.3867 mm, RotLength=0.9602 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.024553, max RotDist=0.039565</title></circle>
+<circle cx="573.74" cy="419.98" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=8, confId=5, branch=S&#10;status=ok&#10;PathLength=9.4780 mm, RotLength=0.7783 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.008910, max RotDist=0.039565</title></circle>
+<circle cx="526.64" cy="488.65" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=9, confId=6, branch=S&#10;status=ok&#10;PathLength=8.8749 mm, RotLength=0.4476 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.042907, max RotDist=0.039565</title></circle>
+<circle cx="426.69" cy="314.49" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=10, confId=8, branch=S&#10;status=ok&#10;PathLength=7.5950 mm, RotLength=1.2863 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.012862, max RotDist=0.039565</title></circle>
+<circle cx="385.01" cy="419.87" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=11, confId=7, branch=S&#10;status=ok&#10;PathLength=7.0613 mm, RotLength=0.7788 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.048724, max RotDist=0.039565</title></circle>
+<circle cx="867.24" cy="324.87" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=13, confId=2, branch=S&#10;status=ok&#10;PathLength=13.2363 mm, RotLength=1.2364 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.041547, max RotDist=0.039565</title></circle>
+<circle cx="614.19" cy="287.09" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=14, confId=8, branch=S&#10;status=ok&#10;PathLength=9.9960 mm, RotLength=1.4183 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.039187, max RotDist=0.039565</title></circle>
+<circle cx="715.00" cy="420.60" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=15, confId=2, branch=S&#10;status=ok&#10;PathLength=11.2868 mm, RotLength=0.7753 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.055548, max RotDist=0.039565</title></circle>
+<circle cx="168.77" cy="425.93" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=16, confId=2, branch=S&#10;status=ok&#10;PathLength=4.2924 mm, RotLength=0.7496 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.070537, max RotDist=0.039565</title></circle>
+<circle cx="373.18" cy="407.61" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=17, confId=7, branch=S&#10;status=ok&#10;PathLength=6.9098 mm, RotLength=0.8379 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.029138, max RotDist=0.039565</title></circle>
+<circle cx="743.03" cy="359.93" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=19, confId=8, branch=S&#10;status=ok&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.042505, max RotDist=0.039565</title></circle>
+<circle cx="600.19" cy="404.72" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=20, confId=2, branch=S&#10;status=ok&#10;PathLength=9.8166 mm, RotLength=0.8518 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.019123, max RotDist=0.039565</title></circle>
+<circle cx="551.50" cy="312.36" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=21, confId=5, branch=S&#10;status=ok&#10;PathLength=9.1931 mm, RotLength=1.2966 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.020894, max RotDist=0.039565</title></circle>
+<circle cx="765.63" cy="428.12" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=22, confId=2, branch=S&#10;status=ok&#10;PathLength=11.9352 mm, RotLength=0.7391 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.028820, max RotDist=0.055953</title></circle>
+<circle cx="351.06" cy="447.10" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=23, confId=5, branch=S&#10;status=ok&#10;PathLength=6.6266 mm, RotLength=0.6477 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.063697, max RotDist=0.039565</title></circle>
+<circle cx="480.98" cy="316.91" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=24, confId=5, branch=S&#10;status=ok&#10;PathLength=8.2902 mm, RotLength=1.2747 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.006089, max RotDist=0.039565</title></circle>
+<circle cx="760.69" cy="445.11" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=25, confId=2, branch=S&#10;status=ok&#10;PathLength=11.8719 mm, RotLength=0.6573 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.035623, max RotDist=0.039565</title></circle>
+<circle cx="774.97" cy="350.68" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=26, confId=5, branch=S&#10;status=ok&#10;PathLength=12.0547 mm, RotLength=1.1120 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.056462, max RotDist=0.055953</title></circle>
+<circle cx="906.97" cy="273.65" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=27, confId=5, branch=S&#10;status=ok&#10;PathLength=13.7450 mm, RotLength=1.4830 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.041922, max RotDist=0.039565</title></circle>
+<circle cx="360.66" cy="283.56" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=28, confId=4, branch=S&#10;status=ok&#10;PathLength=6.7495 mm, RotLength=1.4353 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.019556, max RotDist=0.039565</title></circle>
+<circle cx="293.99" cy="516.91" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=29, confId=5, branch=S&#10;status=ok&#10;PathLength=5.8958 mm, RotLength=0.3115 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.046953, max RotDist=0.039565</title></circle>
+<circle cx="562.95" cy="419.35" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=30, confId=1, branch=S&#10;status=ok&#10;PathLength=9.3398 mm, RotLength=0.7813 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.042359, max RotDist=0.039565</title></circle>
+<circle cx="564.33" cy="374.24" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=31, confId=4, branch=S&#10;status=ok&#10;PathLength=9.3575 mm, RotLength=0.9986 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.029659, max RotDist=0.039565</title></circle>
+<circle cx="743.03" cy="359.93" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=32, confId=2, branch=S&#10;status=ok&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.054853, max RotDist=0.039565</title></circle>
+<circle cx="743.39" cy="338.02" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=34, confId=2, branch=S&#10;status=ok&#10;PathLength=11.6503 mm, RotLength=1.1730 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.049873, max RotDist=0.039565</title></circle>
+<circle cx="223.80" cy="390.77" r="3.2" fill="#0f766e" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=35, confId=8, branch=S&#10;status=ok&#10;PathLength=4.9970 mm, RotLength=0.9190 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=0.045698, max RotDist=0.039565</title></circle>
+<circle cx="488.06" cy="528.35" r="5.7" fill="#f59e0b" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=5, confId=7, branch=S&#10;status=distance warning&#10;PathLength=8.3809 mm, RotLength=0.2564 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=8.341080, max RotDist=0.256409</title></circle>
+<circle cx="690.07" cy="414.13" r="5.7" fill="#f59e0b" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=12, confId=2, branch=S&#10;status=distance warning&#10;PathLength=10.9676 mm, RotLength=0.8065 deg&#10;rows=200, FoundBranch mismatch rows=0&#10;max PathDist=10.934500, max RotDist=0.806966</title></circle>
+<circle cx="931.91" cy="382.21" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=1, confId=9, branch=L&#10;status=branch/incomplete&#10;PathLength=14.0643 mm, RotLength=0.9602 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=13.957000, max RotDist=24.146200</title></circle>
+<circle cx="540.63" cy="341.58" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=3, confId=9, branch=L&#10;status=branch/incomplete&#10;PathLength=9.0540 mm, RotLength=1.1559 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=9.031850, max RotDist=28.888100</title></circle>
+<circle cx="344.02" cy="421.45" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=4, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=6.5364 mm, RotLength=0.7713 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=6.494380, max RotDist=19.488100</title></circle>
+<circle cx="488.06" cy="528.35" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=5, confId=7, branch=L&#10;status=branch/incomplete&#10;PathLength=8.3809 mm, RotLength=0.2564 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=8.342550, max RotDist=6.527860</title></circle>
+<circle cx="706.76" cy="408.48" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=6, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=11.1813 mm, RotLength=0.8337 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=11.168300, max RotDist=21.033300</title></circle>
+<circle cx="722.80" cy="382.21" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=7, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=11.3867 mm, RotLength=0.9602 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=11.363600, max RotDist=24.153100</title></circle>
+<circle cx="573.74" cy="419.98" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=8, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=9.4780 mm, RotLength=0.7783 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=9.453290, max RotDist=19.671300</title></circle>
+<circle cx="526.64" cy="488.65" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=9, confId=6, branch=L&#10;status=branch/incomplete&#10;PathLength=8.8749 mm, RotLength=0.4476 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=8.716210, max RotDist=11.394000</title></circle>
+<circle cx="426.69" cy="314.49" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=10, confId=8, branch=L&#10;status=branch/incomplete&#10;PathLength=7.5950 mm, RotLength=1.2863 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=7.580170, max RotDist=31.995100</title></circle>
+<circle cx="385.01" cy="419.87" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=11, confId=7, branch=L&#10;status=branch/incomplete&#10;PathLength=7.0613 mm, RotLength=0.7788 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=6.986430, max RotDist=19.677900</title></circle>
+<circle cx="690.07" cy="414.13" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=12, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=10.9676 mm, RotLength=0.8065 deg&#10;rows=30, FoundBranch mismatch rows=30&#10;max PathDist=10.933900, max RotDist=0.967519</title></circle>
+<circle cx="614.19" cy="287.09" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=14, confId=8, branch=L&#10;status=branch/incomplete&#10;PathLength=9.9960 mm, RotLength=1.4183 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=9.926970, max RotDist=35.098900</title></circle>
+<circle cx="715.00" cy="420.60" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=15, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=11.2868 mm, RotLength=0.7753 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=11.218600, max RotDist=19.597000</title></circle>
+<circle cx="168.77" cy="425.93" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=16, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=4.2924 mm, RotLength=0.7496 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=4.265820, max RotDist=18.950600</title></circle>
+<circle cx="373.18" cy="407.61" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=17, confId=7, branch=L&#10;status=branch/incomplete&#10;PathLength=6.9098 mm, RotLength=0.8379 deg&#10;rows=94, FoundBranch mismatch rows=94&#10;max PathDist=6.888640, max RotDist=7.394380</title></circle>
+<circle cx="743.03" cy="359.93" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=19, confId=8, branch=L&#10;status=branch/incomplete&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=11.617200, max RotDist=26.751400</title></circle>
+<circle cx="600.19" cy="404.72" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=20, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=9.8166 mm, RotLength=0.8518 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=9.799030, max RotDist=21.482900</title></circle>
+<circle cx="551.50" cy="312.36" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=21, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=9.1931 mm, RotLength=1.2966 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=9.172680, max RotDist=32.238700</title></circle>
+<circle cx="765.63" cy="428.12" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=22, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=11.9352 mm, RotLength=0.7391 deg&#10;rows=200, FoundBranch mismatch rows=200&#10;max PathDist=11.892000, max RotDist=179.974000</title></circle>
+<circle cx="351.06" cy="447.10" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=23, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=6.6266 mm, RotLength=0.6477 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=6.563210, max RotDist=16.411600</title></circle>
+<circle cx="480.98" cy="316.91" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=24, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=8.2902 mm, RotLength=1.2747 deg&#10;rows=200, FoundBranch mismatch rows=200&#10;max PathDist=8.267240, max RotDist=179.981000</title></circle>
+<circle cx="760.69" cy="445.11" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=25, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=11.8719 mm, RotLength=0.6573 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=11.826800, max RotDist=16.654500</title></circle>
+<circle cx="774.97" cy="350.68" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=26, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=12.0547 mm, RotLength=1.1120 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=12.022900, max RotDist=27.829400</title></circle>
+<circle cx="906.97" cy="273.65" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=27, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=13.7450 mm, RotLength=1.4830 deg&#10;rows=200, FoundBranch mismatch rows=200&#10;max PathDist=13.693400, max RotDist=179.972000</title></circle>
+<circle cx="360.66" cy="283.56" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=28, confId=4, branch=L&#10;status=branch/incomplete&#10;PathLength=6.7495 mm, RotLength=1.4353 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=6.732120, max RotDist=35.496400</title></circle>
+<circle cx="293.99" cy="516.91" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=29, confId=5, branch=L&#10;status=branch/incomplete&#10;PathLength=5.8958 mm, RotLength=0.3115 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=5.867740, max RotDist=7.916790</title></circle>
+<circle cx="562.95" cy="419.35" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=30, confId=1, branch=L&#10;status=branch/incomplete&#10;PathLength=9.3398 mm, RotLength=0.7813 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=9.185750, max RotDist=19.733500</title></circle>
+<circle cx="564.33" cy="374.24" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=31, confId=4, branch=L&#10;status=branch/incomplete&#10;PathLength=9.3575 mm, RotLength=0.9986 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=9.325970, max RotDist=25.083600</title></circle>
+<circle cx="743.03" cy="359.93" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=32, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;rows=98, FoundBranch mismatch rows=98&#10;max PathDist=11.617500, max RotDist=26.751300</title></circle>
+<circle cx="743.39" cy="338.02" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=34, confId=2, branch=L&#10;status=branch/incomplete&#10;PathLength=11.6503 mm, RotLength=1.1730 deg&#10;rows=200, FoundBranch mismatch rows=200&#10;max PathDist=11.611400, max RotDist=179.961000</title></circle>
+<circle cx="223.80" cy="390.77" r="5.7" fill="#dc2626" opacity="0.72" stroke="#111827" stroke-width="0.35"><title>testId=35, confId=8, branch=L&#10;status=branch/incomplete&#10;PathLength=4.9970 mm, RotLength=0.9190 deg&#10;rows=200, FoundBranch mismatch rows=200&#10;max PathDist=4.946960, max RotDist=179.974000</title></circle>
+<line x1="86" y1="736" x2="1010" y2="736" class="axis"/>
+<line x1="86" y1="66" x2="86" y2="736" class="axis"/>
+<text x="548.0" y="792" text-anchor="middle" class="axis-label">PathLength [mm]</text>
+<text x="28" y="401.0" transform="rotate(-90 28 401.0)" text-anchor="middle" class="axis-label">RotLength [deg]</text>
+<text x="1038" y="76" class="side-title">Groups</text>
+<circle cx="1045" cy="100" r="5" fill="#0f766e" opacity="0.78"/>
+<text x="1060" y="104" class="legend">OK: 31</text>
+<circle cx="1045" cy="124" r="5" fill="#f59e0b" opacity="0.78"/>
+<text x="1060" y="128" class="legend">distance &gt; limit: 2</text>
+<circle cx="1045" cy="148" r="5" fill="#dc2626" opacity="0.78"/>
+<text x="1060" y="152" class="legend">branch mismatch / incomplete: 31</text>
+<text x="1038" y="194" class="side-title">Worst issue groups</text>
+<text x="1038" y="216" class="side-row">1/9 L  P14.1 R0.9602</text>
+<text x="1038" y="234" class="side-row">27/5 L  P13.7 R1.48</text>
+<text x="1038" y="252" class="side-row">26/5 L  P12.1 R1.11</text>
+<text x="1038" y="270" class="side-row">22/2 L  P11.9 R0.7391</text>
+<text x="1038" y="288" class="side-row">25/2 L  P11.9 R0.6573</text>
+<text x="1038" y="306" class="side-row">32/2 L  P11.6 R1.07</text>
+<text x="1038" y="324" class="side-row">19/8 L  P11.6 R1.07</text>
+<text x="1038" y="342" class="side-row">34/2 L  P11.7 R1.17</text>
+<text x="1038" y="360" class="side-row">7/2 L  P11.4 R0.9602</text>
+<text x="1038" y="378" class="side-row">15/2 L  P11.3 R0.7753</text>
+</svg>

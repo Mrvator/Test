@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760">
+<style>
+svg{background:#f8fafc;color:#111827;font-family:Segoe UI,Arial,sans-serif}
+.title{font-size:24px;font-weight:700;fill:#111827}
+.subtitle,.legend,.note{font-size:13px;fill:#4b5563}
+.plot-bg{fill:#ffffff;stroke:#d1d5db;stroke-width:1}
+.grid{stroke:#e5e7eb;stroke-width:1}
+.axis{stroke:#374151;stroke-width:1.4}
+.tick{font-size:12px;fill:#4b5563}
+.axis-label{font-size:14px;font-weight:650;fill:#374151}
+.ref{stroke:#6b7280;stroke-width:1.5;stroke-dasharray:6 6}
+</style>
+<text x="86" y="32" class="title">RatioPath vs RatioRot precision by PathLength</text>
+<text x="1166" y="32" text-anchor="end" class="subtitle">pathl_v22.csv; n=64 groups; line=rolling median of group mean abs error</text>
+<rect x="86" y="62" width="1080" height="604" class="plot-bg"/>
+<line x1="86" y1="666.00" x2="1166" y2="666.00" class="grid"/>
+<text x="74" y="670.00" text-anchor="end" class="tick">0</text>
+<line x1="86" y1="545.95" x2="1166" y2="545.95" class="grid"/>
+<text x="74" y="549.95" text-anchor="end" class="tick">20</text>
+<line x1="86" y1="425.91" x2="1166" y2="425.91" class="grid"/>
+<text x="74" y="429.91" text-anchor="end" class="tick">40</text>
+<line x1="86" y1="305.86" x2="1166" y2="305.86" class="grid"/>
+<text x="74" y="309.86" text-anchor="end" class="tick">60</text>
+<line x1="86" y1="185.81" x2="1166" y2="185.81" class="grid"/>
+<text x="74" y="189.81" text-anchor="end" class="tick">80</text>
+<line x1="86" y1="65.77" x2="1166" y2="65.77" class="grid"/>
+<text x="74" y="69.77" text-anchor="end" class="tick">100</text>
+<line x1="86.00" y1="62" x2="86.00" y2="666" class="grid"/>
+<text x="86.00" y="692" text-anchor="middle" class="tick">4</text>
+<line x1="282.36" y1="62" x2="282.36" y2="666" class="grid"/>
+<text x="282.36" y="692" text-anchor="middle" class="tick">6</text>
+<line x1="478.73" y1="62" x2="478.73" y2="666" class="grid"/>
+<text x="478.73" y="692" text-anchor="middle" class="tick">8</text>
+<line x1="675.09" y1="62" x2="675.09" y2="666" class="grid"/>
+<text x="675.09" y="692" text-anchor="middle" class="tick">10</text>
+<line x1="871.45" y1="62" x2="871.45" y2="666" class="grid"/>
+<text x="871.45" y="692" text-anchor="middle" class="tick">12</text>
+<line x1="1067.82" y1="62" x2="1067.82" y2="666" class="grid"/>
+<text x="1067.82" y="692" text-anchor="middle" class="tick">14</text>
+<line x1="675.09" y1="62" x2="675.09" y2="666" class="ref"/>
+<text x="683.09" y="82" class="note">reference 10 mm</text>
+<polyline points="135.09,659.34 233.27,660.47 331.45,659.13 429.64,659.53 527.82,659.99 626.00,660.07 724.18,660.25 822.36,659.59 920.55,660.36 1018.73,660.25 1116.91,660.50" fill="none" stroke="#2563eb" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 6"/>
+<polyline points="135.09,246.44 233.27,238.02 331.45,211.92 429.64,215.82 527.82,218.83 626.00,215.82 724.18,140.78 822.36,215.82 920.55,238.05 1018.73,398.05 1116.91,238.10" fill="none" stroke="#dc2626" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray="5 6"/>
+
+
+<line x1="86" y1="666" x2="1166" y2="666" class="axis"/>
+<line x1="86" y1="62" x2="86" y2="666" class="axis"/>
+<text x="626.0" y="732" text-anchor="middle" class="axis-label">PathLength [mm]</text>
+<text x="28" y="364.0" transform="rotate(-90 28 364.0)" text-anchor="middle" class="axis-label">abs(Ratio - expected) [percentage points]</text>
+<line x1="830" y1="94" x2="878" y2="94" stroke="#2563eb" stroke-width="3.2" stroke-linecap="round"/>
+<text x="888" y="99" class="legend">RatioPath</text>
+<line x1="830" y1="118" x2="878" y2="118" stroke="#dc2626" stroke-width="3.2" stroke-linecap="round"/>
+<text x="888" y="123" class="legend">RatioRot</text>
+<line x1="830" y1="142" x2="878" y2="142" stroke="#374151" stroke-width="1.6" stroke-dasharray="5 6"/>
+<text x="888" y="147" class="legend">binned p95</text>
+<text x="86" y="704" class="note">RatioRot je nizsi v celem merenem rozsahu; nizsi cara znamena presnejsi ratio.</text>
+</svg>

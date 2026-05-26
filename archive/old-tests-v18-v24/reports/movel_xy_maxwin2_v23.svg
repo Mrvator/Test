@@ -1,0 +1,155 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="560" viewBox="0 0 1220 560">
+<style>
+svg{background:#f8fafc;color:#111827;font-family:Segoe UI,Arial,sans-serif}
+.title{font-size:24px;font-weight:700;fill:#111827}
+.subtitle,.legend{font-size:13px;fill:#4b5563}
+.legend-title{font-size:13px;font-weight:650;fill:#111827}
+.panel-title{font-size:15px;font-weight:700;fill:#111827}
+.plot-bg{fill:#ffffff;stroke:#d1d5db;stroke-width:1}
+.grid{stroke:#e5e7eb;stroke-width:1}
+.axis{stroke:#374151;stroke-width:1.2}
+.tick{font-size:11px;fill:#4b5563}
+.axis-label{font-size:13px;font-weight:650;fill:#374151}
+</style>
+<text x="78" y="36" class="title">MoveL XY Legacy MaxWin2 v23</text>
+<text x="1176" y="36" text-anchor="end" class="subtitle">n=0 test/branch points</text>
+<text x="78.0" y="64" class="panel-title">Successful Short (0)</text>
+<rect x="78.0" y="82" width="522.0" height="360" class="plot-bg"/>
+<line x1="78.0" y1="442.00" x2="600.0" y2="442.00" class="grid"/>
+<text x="68.0" y="446.00" text-anchor="end" class="tick">0.000000</text>
+<line x1="78.0" y1="352.00" x2="600.0" y2="352.00" class="grid"/>
+<text x="68.0" y="356.00" text-anchor="end" class="tick">90.0000</text>
+<line x1="78.0" y1="262.00" x2="600.0" y2="262.00" class="grid"/>
+<text x="68.0" y="266.00" text-anchor="end" class="tick">180.000</text>
+<line x1="78.0" y1="172.00" x2="600.0" y2="172.00" class="grid"/>
+<text x="68.0" y="176.00" text-anchor="end" class="tick">270.000</text>
+<line x1="78.0" y1="82.00" x2="600.0" y2="82.00" class="grid"/>
+<text x="68.0" y="86.00" text-anchor="end" class="tick">360.000</text>
+<line x1="78.00" y1="82" x2="78.00" y2="442" class="grid"/>
+<text x="78.00" y="464" text-anchor="middle" class="tick">0.000000</text>
+<line x1="182.40" y1="82" x2="182.40" y2="442" class="grid"/>
+<text x="182.40" y="464" text-anchor="middle" class="tick">0.200000</text>
+<line x1="286.80" y1="82" x2="286.80" y2="442" class="grid"/>
+<text x="286.80" y="464" text-anchor="middle" class="tick">0.400000</text>
+<line x1="391.20" y1="82" x2="391.20" y2="442" class="grid"/>
+<text x="391.20" y="464" text-anchor="middle" class="tick">0.600000</text>
+<line x1="495.60" y1="82" x2="495.60" y2="442" class="grid"/>
+<text x="495.60" y="464" text-anchor="middle" class="tick">0.800000</text>
+<line x1="600.00" y1="82" x2="600.00" y2="442" class="grid"/>
+<text x="600.00" y="464" text-anchor="middle" class="tick">1.0000</text>
+<line x1="78.0" y1="442" x2="600.0" y2="442" class="axis"/>
+<line x1="78.0" y1="82" x2="78.0" y2="442" class="axis"/>
+<text x="339.0" y="490" text-anchor="middle" class="axis-label">PathLength [mm]</text>
+<text x="24.0" y="262.0" transform="rotate(-90 24.0 262.0)" text-anchor="middle" class="axis-label">RotLength [deg]</text>
+<text x="654.0" y="64" class="panel-title">Successful Long (0)</text>
+<rect x="654.0" y="82" width="522.0" height="360" class="plot-bg"/>
+<line x1="654.0" y1="442.00" x2="1176.0" y2="442.00" class="grid"/>
+<text x="644.0" y="446.00" text-anchor="end" class="tick">0.000000</text>
+<line x1="654.0" y1="352.00" x2="1176.0" y2="352.00" class="grid"/>
+<text x="644.0" y="356.00" text-anchor="end" class="tick">90.0000</text>
+<line x1="654.0" y1="262.00" x2="1176.0" y2="262.00" class="grid"/>
+<text x="644.0" y="266.00" text-anchor="end" class="tick">180.000</text>
+<line x1="654.0" y1="172.00" x2="1176.0" y2="172.00" class="grid"/>
+<text x="644.0" y="176.00" text-anchor="end" class="tick">270.000</text>
+<line x1="654.0" y1="82.00" x2="1176.0" y2="82.00" class="grid"/>
+<text x="644.0" y="86.00" text-anchor="end" class="tick">360.000</text>
+<line x1="654.00" y1="82" x2="654.00" y2="442" class="grid"/>
+<text x="654.00" y="464" text-anchor="middle" class="tick">0.000000</text>
+<line x1="758.40" y1="82" x2="758.40" y2="442" class="grid"/>
+<text x="758.40" y="464" text-anchor="middle" class="tick">0.200000</text>
+<line x1="862.80" y1="82" x2="862.80" y2="442" class="grid"/>
+<text x="862.80" y="464" text-anchor="middle" class="tick">0.400000</text>
+<line x1="967.20" y1="82" x2="967.20" y2="442" class="grid"/>
+<text x="967.20" y="464" text-anchor="middle" class="tick">0.600000</text>
+<line x1="1071.60" y1="82" x2="1071.60" y2="442" class="grid"/>
+<text x="1071.60" y="464" text-anchor="middle" class="tick">0.800000</text>
+<line x1="1176.00" y1="82" x2="1176.00" y2="442" class="grid"/>
+<text x="1176.00" y="464" text-anchor="middle" class="tick">1.0000</text>
+<line x1="654.0" y1="442" x2="1176.0" y2="442" class="axis"/>
+<line x1="654.0" y1="82" x2="654.0" y2="442" class="axis"/>
+<text x="915.0" y="490" text-anchor="middle" class="axis-label">PathLength [mm]</text>
+<text x="600.0" y="262.0" transform="rotate(-90 600.0 262.0)" text-anchor="middle" class="axis-label">RotLength [deg]</text>
+<text x="78" y="474" class="legend-title">Legacy MaxWin2 color legend</text>
+<rect x="78.00" y="488" width="6.70" height="14" fill="#13786b"/>
+<rect x="84.00" y="488" width="6.70" height="14" fill="#1a7968"/>
+<rect x="90.00" y="488" width="6.70" height="14" fill="#207a65"/>
+<rect x="96.00" y="488" width="6.70" height="14" fill="#277b63"/>
+<rect x="102.00" y="488" width="6.70" height="14" fill="#2d7c60"/>
+<rect x="108.00" y="488" width="6.70" height="14" fill="#347e5d"/>
+<rect x="114.00" y="488" width="6.70" height="14" fill="#3a7f5a"/>
+<rect x="120.00" y="488" width="6.70" height="14" fill="#418058"/>
+<rect x="126.00" y="488" width="6.70" height="14" fill="#478155"/>
+<rect x="132.00" y="488" width="6.70" height="14" fill="#4e8252"/>
+<rect x="138.00" y="488" width="6.70" height="14" fill="#55834f"/>
+<rect x="144.00" y="488" width="6.70" height="14" fill="#5b844c"/>
+<rect x="150.00" y="488" width="6.70" height="14" fill="#62854a"/>
+<rect x="156.00" y="488" width="6.70" height="14" fill="#688647"/>
+<rect x="162.00" y="488" width="6.70" height="14" fill="#6f8744"/>
+<rect x="168.00" y="488" width="6.70" height="14" fill="#758941"/>
+<rect x="174.00" y="488" width="6.70" height="14" fill="#7c8a3e"/>
+<rect x="180.00" y="488" width="6.70" height="14" fill="#828b3c"/>
+<rect x="186.00" y="488" width="6.70" height="14" fill="#898c39"/>
+<rect x="192.00" y="488" width="6.70" height="14" fill="#8f8d36"/>
+<rect x="198.00" y="488" width="6.70" height="14" fill="#968e33"/>
+<rect x="204.00" y="488" width="6.70" height="14" fill="#9d8f31"/>
+<rect x="210.00" y="488" width="6.70" height="14" fill="#a3902e"/>
+<rect x="216.00" y="488" width="6.70" height="14" fill="#aa912b"/>
+<rect x="222.00" y="488" width="6.70" height="14" fill="#b09228"/>
+<rect x="228.00" y="488" width="6.70" height="14" fill="#b79425"/>
+<rect x="234.00" y="488" width="6.70" height="14" fill="#bd9523"/>
+<rect x="240.00" y="488" width="6.70" height="14" fill="#c49620"/>
+<rect x="246.00" y="488" width="6.70" height="14" fill="#ca971d"/>
+<rect x="252.00" y="488" width="6.70" height="14" fill="#d1981a"/>
+<rect x="258.00" y="488" width="6.70" height="14" fill="#d89918"/>
+<rect x="264.00" y="488" width="6.70" height="14" fill="#de9a15"/>
+<rect x="270.00" y="488" width="6.70" height="14" fill="#e59b12"/>
+<rect x="276.00" y="488" width="6.70" height="14" fill="#eb9c0f"/>
+<rect x="282.00" y="488" width="6.70" height="14" fill="#f29d0c"/>
+<rect x="288.00" y="488" width="6.70" height="14" fill="#f59c0b"/>
+<rect x="294.00" y="488" width="6.70" height="14" fill="#f4990c"/>
+<rect x="300.00" y="488" width="6.70" height="14" fill="#f3950d"/>
+<rect x="306.00" y="488" width="6.70" height="14" fill="#f2920e"/>
+<rect x="312.00" y="488" width="6.70" height="14" fill="#f28e0f"/>
+<rect x="318.00" y="488" width="6.70" height="14" fill="#f18b0f"/>
+<rect x="324.00" y="488" width="6.70" height="14" fill="#f08710"/>
+<rect x="330.00" y="488" width="6.70" height="14" fill="#f08411"/>
+<rect x="336.00" y="488" width="6.70" height="14" fill="#ef8012"/>
+<rect x="342.00" y="488" width="6.70" height="14" fill="#ee7d12"/>
+<rect x="348.00" y="488" width="6.70" height="14" fill="#ed7913"/>
+<rect x="354.00" y="488" width="6.70" height="14" fill="#ed7614"/>
+<rect x="360.00" y="488" width="6.70" height="14" fill="#ec7315"/>
+<rect x="366.00" y="488" width="6.70" height="14" fill="#eb6f16"/>
+<rect x="372.00" y="488" width="6.70" height="14" fill="#ea6c16"/>
+<rect x="378.00" y="488" width="6.70" height="14" fill="#ea6817"/>
+<rect x="384.00" y="488" width="6.70" height="14" fill="#e96518"/>
+<rect x="390.00" y="488" width="6.70" height="14" fill="#e86119"/>
+<rect x="396.00" y="488" width="6.70" height="14" fill="#e85e19"/>
+<rect x="402.00" y="488" width="6.70" height="14" fill="#e75a1a"/>
+<rect x="408.00" y="488" width="6.70" height="14" fill="#e6571b"/>
+<rect x="414.00" y="488" width="6.70" height="14" fill="#e5531c"/>
+<rect x="420.00" y="488" width="6.70" height="14" fill="#e5501d"/>
+<rect x="426.00" y="488" width="6.70" height="14" fill="#e44c1d"/>
+<rect x="432.00" y="488" width="6.70" height="14" fill="#e3491e"/>
+<rect x="438.00" y="488" width="6.70" height="14" fill="#e3451f"/>
+<rect x="444.00" y="488" width="6.70" height="14" fill="#e24220"/>
+<rect x="450.00" y="488" width="6.70" height="14" fill="#e13e21"/>
+<rect x="456.00" y="488" width="6.70" height="14" fill="#e03b21"/>
+<rect x="462.00" y="488" width="6.70" height="14" fill="#e03722"/>
+<rect x="468.00" y="488" width="6.70" height="14" fill="#df3423"/>
+<rect x="474.00" y="488" width="6.70" height="14" fill="#de3024"/>
+<rect x="480.00" y="488" width="6.70" height="14" fill="#dd2d24"/>
+<rect x="486.00" y="488" width="6.70" height="14" fill="#dd2925"/>
+<rect x="492.00" y="488" width="6.70" height="14" fill="#dc2626"/>
+<rect x="78" y="488" width="420" height="14" fill="none" stroke="#374151" stroke-width="0.8"/>
+<line x1="78.00" y1="502" x2="78.00" y2="507" stroke="#374151" stroke-width="0.8"/>
+<text x="78.00" y="523" text-anchor="middle" class="tick">0.000000</text>
+<line x1="183.00" y1="502" x2="183.00" y2="507" stroke="#374151" stroke-width="0.8"/>
+<text x="183.00" y="523" text-anchor="middle" class="tick">0.250000</text>
+<line x1="288.00" y1="502" x2="288.00" y2="507" stroke="#374151" stroke-width="0.8"/>
+<text x="288.00" y="523" text-anchor="middle" class="tick">0.500000</text>
+<line x1="393.00" y1="502" x2="393.00" y2="507" stroke="#374151" stroke-width="0.8"/>
+<text x="393.00" y="523" text-anchor="middle" class="tick">0.750000</text>
+<line x1="498.00" y1="502" x2="498.00" y2="507" stroke="#374151" stroke-width="0.8"/>
+<text x="498.00" y="523" text-anchor="middle" class="tick">1.0000</text>
+<text x="526" y="499" class="legend">Long panels use 360 - RotLength.</text>
+</svg>

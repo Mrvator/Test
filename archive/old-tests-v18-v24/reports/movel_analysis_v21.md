@@ -12,17 +12,13 @@
 - Path distance warning: 1.0 mm
 - Rotation distance warning: 1.0 deg
 
-## Test Length Distribution
+## PathL Length Overview
 
-`successful testIds` means a `testId` has at least one row in `success.csv`; `successful test/conf rows` uses every successful `success.csv` row. `unsuccessful testIds` means no success row exists for that `testId`.
-Lengths prefer logged `pathl.csv` values for matching `testId/confId` when present and fall back to A/B pose calculation from `tests.csv` otherwise.
+Lengths here are read from raw `pathl.csv` values. The graph script groups duplicate sample rows by `testId/confId/branch`, but it does not recalculate `PathLength` or `RotLength` from A/B poses.
 
-| sample | rows | PathLength min | PathLength mean | PathLength median | PathLength p95 | PathLength max | RotLength min | RotLength mean | RotLength median | RotLength p95 | RotLength max |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| all testIds | 5098 | 1.2062 | 9.5830 | 9.7617 | 13.8075 | 16.4037 | 0.193827 | 2.1517 | 0.972763 | 1.3757 | 359.322 |
-| successful testIds | 4664 | 1.2062 | 9.6128 | 9.7709 | 13.8379 | 16.4037 | 0.193827 | 1.4178 | 0.970347 | 1.3751 | 180.000 |
-| successful test/conf rows | 5376 | 1.2062 | 9.5947 | 9.7660 | 13.7969 | 16.4037 | 0.193827 | 1.7546 | 0.969136 | 1.3671 | 359.166 |
-| unsuccessful testIds | 434 | 1.8728 | 9.2626 | 9.4287 | 13.6550 | 15.9083 | 0.219333 | 10.0380 | 0.974695 | 1.4223 | 359.322 |
+- Outcome map: `reports/pathl_length_outcome_map_v21.svg`
+- Distribution graph: `reports/pathl_length_outcome_hist_v21.svg`
+- Detail summary: `reports/pathl_length_overview_v21.md`
 
 ## Found But Unsuccessful Branches
 

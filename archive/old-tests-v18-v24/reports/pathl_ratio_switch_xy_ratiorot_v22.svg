@@ -1,0 +1,128 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="860" viewBox="0 0 1200 860">
+<style>
+svg{background:#f8fafc;color:#111827;font-family:Segoe UI,Arial,sans-serif}
+.title{font-size:24px;font-weight:700;fill:#111827}
+.subtitle,.legend,.note{font-size:13px;fill:#4b5563}
+.plot-bg{fill:#ffffff;stroke:#d1d5db;stroke-width:1}
+.grid{stroke:#e5e7eb;stroke-width:1}
+.axis{stroke:#374151;stroke-width:1.4}
+.tick{font-size:12px;fill:#4b5563}
+.axis-label{font-size:14px;font-weight:650;fill:#374151}
+.stat{font-size:12px;fill:#374151}
+</style>
+<text x="92" y="34" class="title">RatioRot precision by PathLength and RotLength</text>
+<text x="1036" y="34" text-anchor="end" class="subtitle">pathl_v22.csv; n=64 groups; color=mean abs error, radius=p95</text>
+<rect x="92" y="72" width="944" height="696" class="plot-bg"/>
+<line x1="92" y1="666.78" x2="1036" y2="666.78" class="grid"/>
+<text x="80" y="670.78" text-anchor="end" class="tick">0.4</text>
+<line x1="92" y1="561.71" x2="1036" y2="561.71" class="grid"/>
+<text x="80" y="565.71" text-anchor="end" class="tick">0.6</text>
+<line x1="92" y1="456.63" x2="1036" y2="456.63" class="grid"/>
+<text x="80" y="460.63" text-anchor="end" class="tick">0.8</text>
+<line x1="92" y1="351.55" x2="1036" y2="351.55" class="grid"/>
+<text x="80" y="355.55" text-anchor="end" class="tick">1</text>
+<line x1="92" y1="246.48" x2="1036" y2="246.48" class="grid"/>
+<text x="80" y="250.48" text-anchor="end" class="tick">1.2</text>
+<line x1="92" y1="141.40" x2="1036" y2="141.40" class="grid"/>
+<text x="80" y="145.40" text-anchor="end" class="tick">1.4</text>
+<line x1="106.29" y1="72" x2="106.29" y2="768" class="grid"/>
+<text x="106.29" y="794" text-anchor="middle" class="tick">4</text>
+<line x1="284.10" y1="72" x2="284.10" y2="768" class="grid"/>
+<text x="284.10" y="794" text-anchor="middle" class="tick">6</text>
+<line x1="461.91" y1="72" x2="461.91" y2="768" class="grid"/>
+<text x="461.91" y="794" text-anchor="middle" class="tick">8</text>
+<line x1="639.71" y1="72" x2="639.71" y2="768" class="grid"/>
+<text x="639.71" y="794" text-anchor="middle" class="tick">10</text>
+<line x1="817.52" y1="72" x2="817.52" y2="768" class="grid"/>
+<text x="817.52" y="794" text-anchor="middle" class="tick">12</text>
+<line x1="995.32" y1="72" x2="995.32" y2="768" class="grid"/>
+<text x="995.32" y="794" text-anchor="middle" class="tick">14</text>
+<circle cx="539.68" cy="641.76" r="2.69" fill="#12786c" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=9, confId=6, branch=S&#10;PathLength=8.8749 mm, RotLength=0.4476 deg&#10;mean abs error=0.005908, p95=0.007017</title></circle>
+<circle cx="593.30" cy="468.01" r="2.71" fill="#12786c" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=8, confId=5, branch=S&#10;PathLength=9.4780 mm, RotLength=0.7783 deg&#10;mean abs error=0.007206, p95=0.007568</title></circle>
+<circle cx="350.74" cy="122.86" r="2.71" fill="#12786c" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=28, confId=4, branch=S&#10;PathLength=6.7495 mm, RotLength=1.4353 deg&#10;mean abs error=0.007350, p95=0.007463</title></circle>
+<circle cx="378.45" cy="467.49" r="2.73" fill="#12786b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=11, confId=7, branch=S&#10;PathLength=7.0613 mm, RotLength=0.7793 deg&#10;mean abs error=0.007556, p95=0.008210</title></circle>
+<circle cx="1001.04" cy="372.46" r="2.72" fill="#12796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=1, confId=9, branch=S&#10;PathLength=14.0643 mm, RotLength=0.9602 deg&#10;mean abs error=0.007698, p95=0.007812</title></circle>
+<circle cx="582.59" cy="352.30" r="2.72" fill="#12796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=31, confId=4, branch=S&#10;PathLength=9.3575 mm, RotLength=0.9986 deg&#10;mean abs error=0.007761, p95=0.007906</title></circle>
+<circle cx="581.02" cy="466.43" r="2.73" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=30, confId=1, branch=S&#10;PathLength=9.3398 mm, RotLength=0.7813 deg&#10;mean abs error=0.007869, p95=0.008092</title></circle>
+<circle cx="811.75" cy="488.61" r="2.74" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=22, confId=2, branch=S&#10;PathLength=11.9352 mm, RotLength=0.7391 deg&#10;mean abs error=0.007906, p95=0.008230</title></circle>
+<circle cx="339.80" cy="536.64" r="2.73" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=23, confId=5, branch=S&#10;PathLength=6.6266 mm, RotLength=0.6477 deg&#10;mean abs error=0.007910, p95=0.008006</title></circle>
+<circle cx="331.79" cy="471.73" r="2.73" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=4, confId=2, branch=S&#10;PathLength=6.5364 mm, RotLength=0.7713 deg&#10;mean abs error=0.007938, p95=0.007935</title></circle>
+<circle cx="364.99" cy="436.47" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=17, confId=7, branch=S&#10;PathLength=6.9098 mm, RotLength=0.8384 deg&#10;mean abs error=0.007948, p95=0.008659</title></circle>
+<circle cx="639.35" cy="131.80" r="2.73" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=14, confId=8, branch=S&#10;PathLength=9.9960 mm, RotLength=1.4183 deg&#10;mean abs error=0.007994, p95=0.008071</title></circle>
+<circle cx="194.93" cy="393.90" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=35, confId=8, branch=S&#10;PathLength=4.9970 mm, RotLength=0.9194 deg&#10;mean abs error=0.008032, p95=0.008597</title></circle>
+<circle cx="806.13" cy="531.60" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=25, confId=2, branch=S&#10;PathLength=11.8719 mm, RotLength=0.6573 deg&#10;mean abs error=0.008463, p95=0.008704</title></circle>
+<circle cx="754.11" cy="469.60" r="2.76" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=15, confId=2, branch=S&#10;PathLength=11.2868 mm, RotLength=0.7753 deg&#10;mean abs error=0.008523, p95=0.008889</title></circle>
+<circle cx="744.73" cy="438.93" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=6, confId=5, branch=S&#10;PathLength=11.1813 mm, RotLength=0.8337 deg&#10;mean abs error=0.008553, p95=0.008562</title></circle>
+<circle cx="126.96" cy="401.56" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=2, confId=8, branch=S&#10;PathLength=4.2325 mm, RotLength=0.9048 deg&#10;mean abs error=0.008593, p95=0.008747</title></circle>
+<circle cx="132.29" cy="483.08" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=16, confId=2, branch=S&#10;PathLength=4.2924 mm, RotLength=0.7496 deg&#10;mean abs error=0.008634, p95=0.008726</title></circle>
+<circle cx="972.65" cy="97.78" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=27, confId=5, branch=S&#10;PathLength=13.7450 mm, RotLength=1.4830 deg&#10;mean abs error=0.008657, p95=0.008663</title></circle>
+<circle cx="487.71" cy="207.23" r="2.76" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=24, confId=5, branch=S&#10;PathLength=8.2902 mm, RotLength=1.2747 deg&#10;mean abs error=0.008698, p95=0.008865</title></circle>
+<circle cx="425.90" cy="201.13" r="2.75" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=10, confId=8, branch=S&#10;PathLength=7.5950 mm, RotLength=1.2863 deg&#10;mean abs error=0.008792, p95=0.008789</title></circle>
+<circle cx="762.99" cy="372.46" r="2.77" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=7, confId=2, branch=S&#10;PathLength=11.3867 mm, RotLength=0.9602 deg&#10;mean abs error=0.008865, p95=0.009239</title></circle>
+<circle cx="555.61" cy="269.48" r="2.78" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=3, confId=9, branch=S&#10;PathLength=9.0540 mm, RotLength=1.1562 deg&#10;mean abs error=0.009115, p95=0.009509</title></circle>
+<circle cx="927.43" cy="227.21" r="2.77" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=13, confId=2, branch=S&#10;PathLength=13.2363 mm, RotLength=1.2367 deg&#10;mean abs error=0.009117, p95=0.009464</title></circle>
+<circle cx="786.03" cy="316.08" r="2.77" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=32, confId=2, branch=S&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;mean abs error=0.009169, p95=0.009296</title></circle>
+<circle cx="567.98" cy="195.71" r="2.77" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=21, confId=5, branch=S&#10;PathLength=9.1931 mm, RotLength=1.2966 deg&#10;mean abs error=0.009226, p95=0.009227</title></circle>
+<circle cx="623.41" cy="429.18" r="2.79" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=20, confId=2, branch=S&#10;PathLength=9.8166 mm, RotLength=0.8523 deg&#10;mean abs error=0.009345, p95=0.009936</title></circle>
+<circle cx="822.38" cy="292.68" r="2.77" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=26, confId=5, branch=S&#10;PathLength=12.0547 mm, RotLength=1.1120 deg&#10;mean abs error=0.009347, p95=0.009384</title></circle>
+<circle cx="786.03" cy="316.08" r="2.79" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=19, confId=8, branch=S&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;mean abs error=0.009817, p95=0.009926</title></circle>
+<circle cx="786.43" cy="260.65" r="2.80" fill="#13796b" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=34, confId=2, branch=S&#10;PathLength=11.6503 mm, RotLength=1.1730 deg&#10;mean abs error=0.010088, p95=0.010169</title></circle>
+<circle cx="274.84" cy="713.26" r="2.85" fill="#14796a" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=29, confId=5, branch=S&#10;PathLength=5.8958 mm, RotLength=0.3115 deg&#10;mean abs error=0.010567, p95=0.012290</title></circle>
+<circle cx="725.73" cy="452.97" r="2.83" fill="#187d67" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=12, confId=2, branch=S&#10;PathLength=10.9676 mm, RotLength=0.8070 deg&#10;mean abs error=0.020413, p95=0.011249</title></circle>
+<circle cx="495.76" cy="742.22" r="2.83" fill="#187d67" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=5, confId=7, branch=S&#10;PathLength=8.3809 mm, RotLength=0.2564 deg&#10;mean abs error=0.020657, p95=0.011421</title></circle>
+<circle cx="811.75" cy="488.61" r="7.92" fill="#f08610" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=22, confId=2, branch=L&#10;PathLength=11.9352 mm, RotLength=0.7391 deg&#10;mean abs error=0.495000, p95=0.940500</title></circle>
+<circle cx="487.71" cy="207.23" r="7.92" fill="#f08610" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=24, confId=5, branch=L&#10;PathLength=8.2902 mm, RotLength=1.2747 deg&#10;mean abs error=0.495000, p95=0.940500</title></circle>
+<circle cx="972.65" cy="97.78" r="7.92" fill="#f08610" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=27, confId=5, branch=L&#10;PathLength=13.7450 mm, RotLength=1.4830 deg&#10;mean abs error=0.495000, p95=0.940500</title></circle>
+<circle cx="786.43" cy="260.65" r="7.92" fill="#f08610" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=34, confId=2, branch=L&#10;PathLength=11.6503 mm, RotLength=1.1730 deg&#10;mean abs error=0.495000, p95=0.940500</title></circle>
+<circle cx="194.93" cy="393.90" r="7.92" fill="#f08610" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=35, confId=8, branch=L&#10;PathLength=4.9970 mm, RotLength=0.9194 deg&#10;mean abs error=0.495000, p95=0.940500</title></circle>
+<circle cx="539.68" cy="641.76" r="7.97" fill="#8a37cf" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=9, confId=6, branch=L&#10;PathLength=8.8749 mm, RotLength=0.4476 deg&#10;mean abs error=0.729980, p95=0.956000</title></circle>
+<circle cx="581.02" cy="466.43" r="7.97" fill="#8a37d0" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=30, confId=1, branch=L&#10;PathLength=9.3398 mm, RotLength=0.7813 deg&#10;mean abs error=0.729994, p95=0.956000</title></circle>
+<circle cx="1001.04" cy="372.46" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=1, confId=9, branch=L&#10;PathLength=14.0643 mm, RotLength=0.9602 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="425.90" cy="201.13" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=10, confId=8, branch=L&#10;PathLength=7.5950 mm, RotLength=1.2863 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="378.45" cy="467.49" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=11, confId=7, branch=L&#10;PathLength=7.0613 mm, RotLength=0.7793 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="639.35" cy="131.80" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=14, confId=8, branch=L&#10;PathLength=9.9960 mm, RotLength=1.4183 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="754.11" cy="469.60" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=15, confId=2, branch=L&#10;PathLength=11.2868 mm, RotLength=0.7753 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="132.29" cy="483.08" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=16, confId=2, branch=L&#10;PathLength=4.2924 mm, RotLength=0.7496 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="786.03" cy="316.08" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=19, confId=8, branch=L&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="623.41" cy="429.18" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=20, confId=2, branch=L&#10;PathLength=9.8166 mm, RotLength=0.8523 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="567.98" cy="195.71" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=21, confId=5, branch=L&#10;PathLength=9.1931 mm, RotLength=1.2966 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="339.80" cy="536.64" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=23, confId=5, branch=L&#10;PathLength=6.6266 mm, RotLength=0.6477 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="806.13" cy="531.60" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=25, confId=2, branch=L&#10;PathLength=11.8719 mm, RotLength=0.6573 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="822.38" cy="292.68" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=26, confId=5, branch=L&#10;PathLength=12.0547 mm, RotLength=1.1120 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="350.74" cy="122.86" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=28, confId=4, branch=L&#10;PathLength=6.7495 mm, RotLength=1.4353 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="274.84" cy="713.26" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=29, confId=5, branch=L&#10;PathLength=5.8958 mm, RotLength=0.3115 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="555.61" cy="269.48" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=3, confId=9, branch=L&#10;PathLength=9.0540 mm, RotLength=1.1562 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="582.59" cy="352.30" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=31, confId=4, branch=L&#10;PathLength=9.3575 mm, RotLength=0.9986 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="786.03" cy="316.08" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=32, confId=2, branch=L&#10;PathLength=11.6458 mm, RotLength=1.0675 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="331.79" cy="471.73" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=4, confId=2, branch=L&#10;PathLength=6.5364 mm, RotLength=0.7713 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="495.76" cy="742.22" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=5, confId=7, branch=L&#10;PathLength=8.3809 mm, RotLength=0.2564 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="744.73" cy="438.93" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=6, confId=5, branch=L&#10;PathLength=11.1813 mm, RotLength=0.8337 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="762.99" cy="372.46" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=7, confId=2, branch=L&#10;PathLength=11.3867 mm, RotLength=0.9602 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="593.30" cy="468.01" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=8, confId=5, branch=L&#10;PathLength=9.4780 mm, RotLength=0.7783 deg&#10;mean abs error=0.750000, p95=0.966000</title></circle>
+<circle cx="364.99" cy="436.47" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=17, confId=7, branch=L&#10;PathLength=6.9098 mm, RotLength=0.8384 deg&#10;mean abs error=0.760000, p95=0.967000</title></circle>
+<circle cx="725.73" cy="452.97" r="8.00" fill="#7c3aed" opacity="0.72" stroke="#111827" stroke-width="0.25"><title>RatioRot&#10;testId=12, confId=2, branch=L&#10;PathLength=10.9676 mm, RotLength=0.8070 deg&#10;mean abs error=0.920000, p95=0.983000</title></circle>
+<line x1="92" y1="768" x2="1036" y2="768" class="axis"/>
+<line x1="92" y1="72" x2="92" y2="768" class="axis"/>
+<text x="564.0" y="832" text-anchor="middle" class="axis-label">PathLength [mm]</text>
+<text x="28" y="420.0" transform="rotate(-90 28 420.0)" text-anchor="middle" class="axis-label">RotLength [deg]</text>
+<rect x="1070" y="80" width="24" height="18" fill="#7c3aed"/>
+<rect x="1070" y="98" width="24" height="18" fill="#a83191"/>
+<rect x="1070" y="116" width="24" height="18" fill="#d52735"/>
+<rect x="1070" y="134" width="24" height="18" fill="#e5501d"/>
+<rect x="1070" y="152" width="24" height="18" fill="#ef8211"/>
+<rect x="1070" y="170" width="24" height="18" fill="#e6a40c"/>
+<rect x="1070" y="188" width="24" height="18" fill="#c3b210"/>
+<rect x="1070" y="206" width="24" height="18" fill="#a0c113"/>
+<rect x="1070" y="224" width="24" height="18" fill="#7ec81a"/>
+<rect x="1070" y="242" width="24" height="18" fill="#63b32f"/>
+<rect x="1070" y="260" width="24" height="18" fill="#479f44"/>
+<rect x="1070" y="278" width="24" height="18" fill="#2b8a59"/>
+<text x="1106" y="85" class="legend">clipped p98</text>
+<text x="1106" y="99" class="legend">75 pp</text>
+<text x="1106" y="294" class="legend">0 pp</text>
+<circle cx="1082" cy="334" r="2.6" fill="#64748b" opacity="0.65"/>
+<circle cx="1082" cy="374" r="8.0" fill="#64748b" opacity="0.65"/>
+<text x="1106" y="338" class="legend">lower p95</text>
+<text x="1106" y="378" class="legend">higher p95</text>
+<text x="92" y="800" class="note">Mean stats: median 0.020535, p95 0.750000, max 0.920000; p95-error median 0.011856, p95 0.966000.</text>
+</svg>
